@@ -101,6 +101,8 @@
 
 ## Modelo Relacional de la BD
 
+![Imagen modelo](/models/mercado-de-creaciones-modelo.png)
+
 ## Reglas de Negocio
 
 
