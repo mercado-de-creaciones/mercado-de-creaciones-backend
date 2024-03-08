@@ -19,7 +19,7 @@ ___
 - #### **Jest:** Biblioteca _javascript_ para _Unit Testing_.
 
 ## Modelo relacional de BDs:
-![Imagen modelo]()
+![Imagen modelo](/models/mercado-de-creaciones-modelo.png)
 
 ## Referencias hostings:
 - **Netlify Function:** [Netlify Function](https://www.netlify.com/platform/core/functions/)
