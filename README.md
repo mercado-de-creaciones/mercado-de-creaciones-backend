@@ -1,26 +1,32 @@
 # Mercado de creaciones Backend - Serverless Functions
 
-Backend de proyecto de mercado de creaciones que estará construido con **Serverless Functions** del servicio de _Netlify_.
+Backend de proyecto de mercado de creaciones que estará construido con **Serverless Functions** usando el servicio de _Netlify_.
 
-Además, este backend usará una base de datos _SQL_ que se usará en las **Serverless Functions** de _Netlify_, así creando una _API_.
+Además, este backend usará una base de datos _SQL_ que se usará en las **Serverless Functions** de _Netlify_, así creando una _API_ para cada caso de uso.
 
-**Ejemplo Netlify Function con NodeJS:**
+___
+
+**Ejemplo estructura _Netlify Function_ con _NodeJS_:**
 
 ![Esquema de Netlify Function](https://www.netlify.com/v3/img/products/functions-manage.webp)
 ___
 
 ## Tecnologías a utilizar:
-- #### **_NodeJS:_** entorno de ejecución _javascript_ para el _backend_.
-- #### **_Typescript:_** superset de _javascript_ para agregar tipado estático.
-- #### **_MySQL:_** gestor de base de datos _SQL_.
-- #### **_Docker:_** gestor de contenedores para montar nuestra _BD_ local.
-- #### **_Netlify _Function:** servicio para nuestro backend en producción.
-- #### **_Planetscale:_** servicio para nuestra base de datos SQL en producción.
-- #### **_Jest:_** Biblioteca _javascript_ para _Unit Testing_.
+#### **NodeJS** 
+![Tecnologias](https://skillicons.dev/icons?i=nodejs)
+#### **Typescript**
+![Tecnologias](https://skillicons.dev/icons?i=typescript)
+#### **MySQL**
+![Tecnologias](https://skillicons.dev/icons?i=mysql)
+#### **Docker**
+![Tecnologias](https://skillicons.dev/icons?i=docker)
+#### **Netlify Functions**
+![Tecnologias](https://skillicons.dev/icons?i=netlify)
+#### **Planetscale**
+![Tecnologias](https://skillicons.dev/icons?i=planetscale)
+#### **Jest**
+![Tecnologias](https://skillicons.dev/icons?i=jest)
 
-## Modelo relacional de BDs:
-![Imagen modelo]()
-
-## Referencias hostings:
+## Referencias hosting y proveedores:
 - **Netlify Function:** [Netlify Function](https://www.netlify.com/platform/core/functions/)
 - **Planet Scale:** [Planetscale](https://planetscale.com/)
