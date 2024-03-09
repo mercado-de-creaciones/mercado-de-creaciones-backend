@@ -10,13 +10,13 @@ Además, este backend usará una base de datos _SQL_ que se usará en las **Serv
 ___
 
 ## Tecnologías a utilizar:
-- #### **NodeJS:** entorno de ejecución _javascript_ para el _backend_.
-- #### **Typescript:** superset de _javascript_ para agregar tipado estático.
-- #### **MySQL:** gestor de base de datos _SQL_.
-- #### **Docker:** gestor de contenedores para montar nuestra _BD_ local.
-- #### **Netlify Function:** servicio para nuestro backend en producción.
-- #### **Planetscale:** servicio para nuestra base de datos SQL en producción.
-- #### **Jest:** Biblioteca _javascript_ para _Unit Testing_.
+- #### **_NodeJS:_** entorno de ejecución _javascript_ para el _backend_.
+- #### **_Typescript:_** superset de _javascript_ para agregar tipado estático.
+- #### **_MySQL:_** gestor de base de datos _SQL_.
+- #### **_Docker:_** gestor de contenedores para montar nuestra _BD_ local.
+- #### **_Netlify _Function:** servicio para nuestro backend en producción.
+- #### **_Planetscale:_** servicio para nuestra base de datos SQL en producción.
+- #### **_Jest:_** Biblioteca _javascript_ para _Unit Testing_.
 
 ## Modelo relacional de BDs:
 ![Imagen modelo]()
