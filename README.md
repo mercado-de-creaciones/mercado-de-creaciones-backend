@@ -38,7 +38,7 @@ ___
 ---
 
 ## Diagrama de arquitectura limpia
-Esta app see desarrollará bajo una arquitectura limpia incompleta, ya que no usaremos los _Datasources_, el patrón _Repository_ y lo adaptaremos según la estructura dada de las _Serverless Function_ de Netlify. Sin embargo, se usarán buenas prácticas de _Clean code_ y principios _SOLID_ que permitirá la mantenibilidad y escalabilidad de la aplicación.
+Esta app se desarrollará bajo una arquitectura limpia incompleta, ya que no usaremos los _Datasources_, el patrón _Repository_ y lo adaptaremos según la estructura dada de las _Serverless Function_ de Netlify. Sin embargo, se usarán buenas prácticas de _Clean code_ y principios _SOLID_ que permitirá la mantenibilidad y escalabilidad de la aplicación.
 
 ![arquitectura-limpia](https://www.redalyc.org/journal/3442/344268257016/344268257016_gf4.png)
 
@@ -52,7 +52,7 @@ Esta app see desarrollará bajo una arquitectura limpia incompleta, ya que no us
 | `/modulo/config/adapter`         | Contiene adaptadores que son piezas de código de librerías externas que adapta funcionalidades para que sean flexibles al cambio | `nombre-modulo.adapter.ts` |
 | `/modulo/config/utils`           | Contiene funciones que realizan tareas comunes y que pueden ser reutilizadas(por ejemplo, formatear fechas, montos, calculos, etc)  | `nombre-descriptivo.ts` |
 | `/modulo/data/mysql/index.ts`    | Contiene la configuración de prisma que es el ORM que usaremos para conectarnos a una BD de MySQL  | N/A |
-| `/modulo/dtos`                   | Contiene los _"dtos"_ de nuestra app que se usan para validar los datos recibidos en peticiones _POST_ y _PUT_ comunmente | `/nombre-modulo/nombre-dto.dto.ts` |
+| `/modulo/dtos`                   | Contiene los _"dtos"_ de nuestra app que se usan para validar los datos recibidos en peticiones _POST_ y _PUT_ comunmente | `nombre-dto.dto.ts` |
 | `/modulo/services`               | Contiene los servicios independientes que son los que se conectan a algo externo(nube, base de datos, storage, servicios de emails, etc) | `nombre-descritivo.service.ts` |
 | `/modulo/middlewares`            | Contiene los middlewares que son funciones que se ejecutaran antes de que se haga una petición HTTP | `nombre-descritivo.middleware.ts` |
 | `/tests`                         | Aquí se definiran los archivos de prueba |  **_Dentro debe seguir la estructura de carpetas de `/netlify` y los archivos se definen así:_** `archivo.test.ts` |
