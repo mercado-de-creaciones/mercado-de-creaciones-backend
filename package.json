@@ -1,0 +1,33 @@
+{
+  "name": "mercado-de-creaciones-backend",
+  "version": "1.0.0",
+  "description": "Backend de proyecto de mercado de creaciones que estará construido con **Serverless Functions** usando el servicio de _Netlify_.",
+  "main": "index.js",
+  "scripts": {
+    "netlify:dev": "netlify dev",
+    "netlify:prod": "netlify deploy --prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.12.12",
+    "@types/nodemailer": "^6.4.15",
+    "@types/ws": "^8.5.10",
+    "drizzle-kit": "^0.21.4",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.3",
+    "@netlify/functions": "^2.7.0",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.30.10",
+    "env-var": "^7.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.13",
+    "ws": "^8.17.0"
+  }
+}
