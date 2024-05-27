@@ -1,58 +1,44 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
-import { users } from "../../data/schemas/user.schema";
-import { envs } from "../../config/envs";
-
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { Pool, neonConfig } from "@neondatabase/serverless";
-import ws from "ws";
-
-neonConfig.webSocketConstructor = ws;
+import type { HandlerEvent, Handler } from "@netlify/functions";
+import { HEADERS } from "../../config/utils/constants";
+import { RegisterUserDto } from "./dtos";
+import { fromBodyToObject } from "../../config/utils";
+import { RegisterUser } from "./use-cases/register-user";
 
 
-const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-  const { httpMethod } = event;
+
+const handler: Handler = async (event: HandlerEvent) => {
+  const { httpMethod, path } = event;
+  const body = event.body ? fromBodyToObject(event.body) : {};
+
+  if (httpMethod === "POST" && path.includes("/register")) {
+    const [error, registerUserDto] = RegisterUserDto.create(body);
+    if (error) return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: error,
+      }),
+      headers: HEADERS.json,
+    }
+
+    return new RegisterUser()
+      .execute(registerUserDto!)
+      .then((res) => res)
+      .catch((error) => error);
+
+  }
 
   if (httpMethod === "GET") {
-    console.log({ event, context });
 
-    const pool = new Pool({ connectionString: envs.DATABASE_URL });
-    const db = drizzle(pool);
+  }
 
-    const user = await db.insert(users).values({
-      name: "Moises Prado",
-      email: "moi.prado20@gmail.com",
-      password: "12345678",
-    })
 
-    await pool.end();
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: "Usuario Insertado correctamente",
-        user,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  }  
-  
-  if (httpMethod === "POST") {
-    // Code for POST method
-  }  
-  
-  if (httpMethod === "PUT") {
-    // Code for PUT method
-  }  
-  
-  if (httpMethod === "DELETE") {
-    // Code for DELETE method
-  }  
-  
   return {
     statusCode: 405,
-    body: "Method Not Allowed",
-  };
-};
+    body: JSON.stringify({
+      message: "Method Not Allowed",
+    }),
+    headers: HEADERS.json,
+  }
+}
 
 export { handler };
