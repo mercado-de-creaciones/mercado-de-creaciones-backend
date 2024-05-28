@@ -104,6 +104,7 @@ export class RegisterUser implements RegisterUserUseCase {
         body: JSON.stringify({
           message: error,
         }),
+        headers: HEADERS.json,
       };
     }
   }

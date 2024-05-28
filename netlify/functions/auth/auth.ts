@@ -1,7 +1,7 @@
 import type { HandlerEvent, Handler } from "@netlify/functions";
 
-import { LoginUser, RegisterUser, ValidateEmail } from "./use-cases";
-import { LoginUserDto, RegisterUserDto } from "./dtos";
+import { LoginUser, RegisterUser, ResetPassword, ValidateEmail } from "./use-cases";
+import { LoginUserDto, RegisterUserDto, ResetPasswordDto } from "./dtos";
 import { HEADERS, fromBodyToObject } from "../../config/utils";
 
 const handler: Handler = async (event: HandlerEvent) => {
@@ -44,7 +44,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   }
 
   if (httpMethod === "POST" && path.includes("/reset-password")) { 
-    const [error, resetPasswordDto] = LoginUserDto.create(body);
+    const [error, resetPasswordDto] = ResetPasswordDto.create(body);
     if (error)
       return {
         statusCode: 400,
@@ -54,7 +54,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         headers: HEADERS.json,
       };
 
-    return new LoginUser()
+    return new ResetPassword()
       .execute(resetPasswordDto!)
       .then((res) => res)
       .catch((error) => error);

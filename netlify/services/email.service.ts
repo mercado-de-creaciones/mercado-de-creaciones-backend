@@ -52,7 +52,7 @@ export class EmailService {
 
     try {
       const sentInformation = await this.transporter.sendMail(mailOptions);
-      console.log(sentInformation);
+      // console.log(sentInformation);
 
       return true;
     } catch (error) {
