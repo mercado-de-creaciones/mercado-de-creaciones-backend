@@ -36,7 +36,7 @@ export class LoginUser implements LoginUserUseCase {
       headers: HEADERS.json,
     };
     
-    const { password } = user;
+    const { password, ...newUser } = user;
 
     const isMatching = BcriptAdapter.compare(dto.password, password);
     if (!isMatching) return {
@@ -47,7 +47,7 @@ export class LoginUser implements LoginUserUseCase {
       headers: HEADERS.json,
     };
 
-    const token = await JwtAdapter.generateToken({ id: user.id }, "1d");
+    const token = await JwtAdapter.generateToken({ email: user.email }, "1d");
     if (!token) return {
       statusCode: 500,
       body: JSON.stringify({
@@ -62,7 +62,7 @@ export class LoginUser implements LoginUserUseCase {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        user,
+        user: newUser,
         token,
       }),
       headers: HEADERS.json,

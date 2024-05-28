@@ -1,15 +1,15 @@
-import { Message } from "../../interfaces/response.interface";
-import { AuthRepository } from "../../repositories/auth.repository";
-import { ResetPasswordDto } from "../../dtos/auth/reset-password.dto";
+import { ResetPasswordDto } from "../dtos";
+
+import { HandlerResponse } from "@netlify/functions";
 
 interface ResetPasswordUseCase {
-  execute: (dto: ResetPasswordDto) => Promise<Message>;
+  execute: (dto: ResetPasswordDto) => Promise<HandlerResponse>;
 }
 
 export class ResetPassword implements ResetPasswordUseCase {
-  constructor(private readonly authRepository: AuthRepository) {}
-
-  public execute = (dto: ResetPasswordDto) => {
-    return this.authRepository.resetPassword(dto);
+  public async execute(dto: ResetPasswordDto): Promise<HandlerResponse>{
+    return {
+      statusCode: 200,
+    }
   };
 }
