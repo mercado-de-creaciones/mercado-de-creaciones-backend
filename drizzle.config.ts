@@ -9,6 +9,6 @@ export default defineConfig({
     url: envs.DATABASE_URL,
   },
   migrations: {
-    schema: 'public'
-  }
+    schema: "public",
+  },
 });

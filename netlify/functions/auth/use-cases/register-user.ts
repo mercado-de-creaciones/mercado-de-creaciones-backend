@@ -17,8 +17,10 @@ interface RegisterUserUseCase {
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
     public readonly emailService: EmailService = new EmailService(
+      envs.MAILER_HOST,
       envs.MAILER_SERVICE,
       envs.MAILER_EMAIL,
+      envs.MAILER_PORT,
       envs.MAILER_SECRET_KEY,
       envs.SEND_EMAIL
     )

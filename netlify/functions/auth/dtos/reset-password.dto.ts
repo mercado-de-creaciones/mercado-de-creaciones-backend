@@ -1,9 +1,7 @@
 import { REGEX } from "../../../config/utils";
 
-export class ResetPasswordDto{
-  private constructor(
-    public readonly email: string
-  ){}
+export class ResetPasswordDto {
+  private constructor(public readonly email: string) {}
 
   static create(object: { [key: string]: any }): [string?, ResetPasswordDto?] {
     const { email } = object;

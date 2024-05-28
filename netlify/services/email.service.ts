@@ -16,13 +16,18 @@ export class EmailService {
   private transporter: Transporter;
 
   constructor(
+    mailerHost: string,
     mailerService: string,
     mailerEmail: string,
+    mailerPort: number,
     senderEmailPassword: string,
     private readonly postToProvider: boolean
   ) {
     this.transporter = nodemailer.createTransport({
+      host: mailerHost,
       service: mailerService,
+      port: mailerPort,
+      secure: true,
       auth: {
         user: mailerEmail,
         pass: senderEmailPassword,
@@ -47,10 +52,11 @@ export class EmailService {
 
     try {
       const sentInformation = await this.transporter.sendMail(mailOptions);
-      // console.log(sentInformation);
+      console.log(sentInformation);
 
       return true;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }

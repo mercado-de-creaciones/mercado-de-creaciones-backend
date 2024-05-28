@@ -1,10 +1,8 @@
 import type { HandlerEvent, Handler } from "@netlify/functions";
-import { HEADERS } from "../../config/utils/constants";
-import { RegisterUserDto } from "./dtos";
-import { fromBodyToObject } from "../../config/utils";
-import { RegisterUser } from "./use-cases/register-user";
 
-
+import { LoginUser, RegisterUser } from "./use-cases";
+import { LoginUserDto, RegisterUserDto } from "./dtos";
+import { HEADERS, fromBodyToObject } from "../../config/utils";
 
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path } = event;
@@ -12,25 +10,40 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   if (httpMethod === "POST" && path.includes("/register")) {
     const [error, registerUserDto] = RegisterUserDto.create(body);
-    if (error) return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: error,
-      }),
-      headers: HEADERS.json,
-    }
+    if (error)
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: error,
+        }),
+        headers: HEADERS.json,
+      };
 
     return new RegisterUser()
       .execute(registerUserDto!)
       .then((res) => res)
       .catch((error) => error);
+  }
 
+  if (httpMethod === "POST" && path.includes("/login")) { 
+    const [error, loginUserDto] = LoginUserDto.create(body);
+    if (error)
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: error,
+        }),
+        headers: HEADERS.json,
+      };
+    
+     return new LoginUser()
+       .execute(loginUserDto!)
+       .then((res) => res)
+       .catch((error) => error);
   }
 
   if (httpMethod === "GET") {
-
   }
-
 
   return {
     statusCode: 405,
@@ -38,7 +51,7 @@ const handler: Handler = async (event: HandlerEvent) => {
       message: "Method Not Allowed",
     }),
     headers: HEADERS.json,
-  }
-}
+  };
+};
 
 export { handler };
