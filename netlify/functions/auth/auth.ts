@@ -3,6 +3,7 @@ import type { HandlerEvent, Handler } from "@netlify/functions";
 import { ChangePassword, LoginUser, RegisterUser, ResetPassword, ValidateEmail } from "./use-cases";
 import { ChangePasswordDto, LoginUserDto, RegisterUserDto, ResetPasswordDto } from "./dtos";
 import { HEADERS, fromBodyToObject } from "../../config/utils";
+import { CheckUserToken } from "./use-cases/check-user-token";
 
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path } = event;
@@ -79,6 +80,13 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   if (httpMethod === "GET" && path.includes("/validate-email") && token) {
     return new ValidateEmail()
+      .execute(token)
+      .then((res) => res)
+      .catch((error) => error);
+  }
+
+  if (httpMethod === "GET" && path.includes("/change-password") && token) {
+    return new CheckUserToken()
       .execute(token)
       .then((res) => res)
       .catch((error) => error);
