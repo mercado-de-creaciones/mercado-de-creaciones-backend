@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "netlify:dev": "netlify dev",
-    "netlify:prod": "netlify deploy --prod"
+    "netlify:prod": "netlify deploy --prod",
+    "drizzle:generate": "npx drizzle-kit generate",
+    "drizzle:push": "npx drizzle-kit push",
+    "drizzle:introspect": "npx drizzle-kit introspect",
+    "drizzle:studio": "npx drizzle-kit studio"
   },
   "keywords": [],
   "author": "",

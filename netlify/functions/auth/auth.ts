@@ -6,7 +6,7 @@ import { HEADERS, fromBodyToObject } from "../../config/utils";
 import { CheckUserToken } from "./use-cases/check-user-token";
 
 const handler: Handler = async (event: HandlerEvent) => {
-  const { httpMethod, path } = event;
+  const { httpMethod, path, } = event;
   const body = event.body ? fromBodyToObject(event.body) : {};
   const token = path.split("/").pop();
 
