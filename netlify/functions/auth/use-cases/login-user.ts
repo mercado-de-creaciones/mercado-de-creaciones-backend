@@ -25,7 +25,10 @@ export class LoginUser implements LoginUserUseCase {
       body: JSON.stringify({
         message: "El usuario no existe",
       }),
-      headers: HEADERS.json,
+      headers: {
+      ...HEADERS.json,
+      ...HEADERS.cors,
+    },
     }
 
     if (!user.emailValidated) return {
@@ -33,7 +36,10 @@ export class LoginUser implements LoginUserUseCase {
       body: JSON.stringify({
         message: "Tu cuenta no ha sido confirmada",
       }),
-      headers: HEADERS.json,
+      headers: {
+      ...HEADERS.json,
+      ...HEADERS.cors,
+    },
     };
     
     const { password, ...newUser } = user;
@@ -44,7 +50,10 @@ export class LoginUser implements LoginUserUseCase {
       body: JSON.stringify({
         message: "El password es incorrecto",
       }),
-      headers: HEADERS.json,
+      headers: {
+      ...HEADERS.json,
+      ...HEADERS.cors,
+    },
     };
 
     const token = await JwtAdapter.generateToken({ email: user.email }, "1d");
@@ -53,7 +62,10 @@ export class LoginUser implements LoginUserUseCase {
       body: JSON.stringify({
         message: "Error generando token",
       }),
-      headers: HEADERS.json,
+      headers: {
+      ...HEADERS.json,
+      ...HEADERS.cors,
+    },
     
     };
 
@@ -65,7 +77,10 @@ export class LoginUser implements LoginUserUseCase {
         user: newUser,
         token,
       }),
-      headers: HEADERS.json,
+      headers: {
+      ...HEADERS.json,
+      ...HEADERS.cors,
+    },
     };
       
   }
