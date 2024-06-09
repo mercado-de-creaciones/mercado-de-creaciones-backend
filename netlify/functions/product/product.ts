@@ -1,15 +1,21 @@
 import { Handler, HandlerEvent } from "@netlify/functions";
-import { HEADERS } from "../../config/utils";
+import { HEADERS, fromBodyToObject } from "../../config/utils";
+import { RecentProducts } from "./use-cases/recent-products";
 
-const handler: Handler = async (event: HandlerEvent) => { 
-  console.log(JSON.stringify(event,null,2));
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Hola desde funcion producto",
-    }),
-    headers: HEADERS.json
-  }
+const handler: Handler = async (event: HandlerEvent) => {
+  const { httpMethod, path, } = event;
+  const body = event.body ? fromBodyToObject(event.body) : {};
+  const token = path.split("/").pop();
+
+
+if (httpMethod === "GET" && path.includes("/recent-products")) {
+
+
+  return new RecentProducts()
+    .execute()
+    .then((res) => res)
+    .catch((error) => error);
+}
 }
 
 export { handler };
