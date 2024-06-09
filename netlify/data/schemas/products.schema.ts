@@ -2,8 +2,8 @@ import { serial, varchar, pgTable, pgEnum, timestamp, integer } from "drizzle-or
 import { categoriesTable } from "./categories.schema";
 
 
-// export const sizesEnum = pgEnum("sizes", ["XS","S", "M", "L", "XL","XXL"]);
-// export const statesEnum = pgEnum("states", ["PUBLISHED", "INACTIVE"]);
+export const sizesEnum = pgEnum("size", ["XS","S", "M", "L", "XL","XXL"]);
+export const statusEnum = pgEnum("status", ["PUBLISHED", "INACTIVE"]);
 
 export const productsTable = pgTable("products", {
   id: serial("id").primaryKey(),
@@ -13,7 +13,7 @@ export const productsTable = pgTable("products", {
   price: varchar("price").notNull(),
   stock: varchar("stock").notNull(),
   size: varchar("size").notNull(),
-  state: varchar("state").notNull(),
+  status: varchar("status").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt"),
   categoryId: integer("categoryId")

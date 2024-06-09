@@ -34,10 +34,7 @@ export class RegisterUser implements RegisterUserUseCase {
         body: JSON.stringify({
           message: "Error generando token de validación de cuenta",
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
 
     const link = `${envs.FRONTEND_URL}/confirmar/${token}`;
@@ -64,10 +61,7 @@ export class RegisterUser implements RegisterUserUseCase {
         body: JSON.stringify({
           message: "Error enviando email de validación de cuenta",
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
 
     return true;
@@ -85,10 +79,7 @@ export class RegisterUser implements RegisterUserUseCase {
         body: JSON.stringify({
           message: "Usuario ya registrado",
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
 
     try {
@@ -105,10 +96,7 @@ export class RegisterUser implements RegisterUserUseCase {
           message:
             "Usuario creado correctamente, revisa tu email para confirmar tu cuenta",
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
     } catch (error) {
       return {
@@ -116,10 +104,7 @@ export class RegisterUser implements RegisterUserUseCase {
         body: JSON.stringify({
           message: error,
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
     }
   }

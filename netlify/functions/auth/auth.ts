@@ -10,13 +10,6 @@ const handler: Handler = async (event: HandlerEvent) => {
   const body = event.body ? fromBodyToObject(event.body) : {};
   const token = path.split("/").pop();
 
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: HEADERS.cors,
-      body: JSON.stringify({ message: "This is a preflight response" }),
-    };
-  }
 
   if (httpMethod === "POST" && path.includes("/register")) {
     const [error, registerUserDto] = RegisterUserDto.create(body);
@@ -26,10 +19,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         body: JSON.stringify({
           message: error,
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
 
     return new RegisterUser()
@@ -46,10 +36,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         body: JSON.stringify({
           message: error,
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
     
      return new LoginUser()
@@ -66,10 +53,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         body: JSON.stringify({
           message: error,
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
 
     return new ResetPassword()
@@ -86,10 +70,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         body: JSON.stringify({
           message: error,
         }),
-        headers: {
-          ...HEADERS.json,
-          ...HEADERS.cors,
-        },
+        headers: HEADERS.json,
       };
     
     return new ChangePassword()
@@ -119,10 +100,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     body: JSON.stringify({
       message: "Method Not Allowed",
     }),
-    headers: {
-      ...HEADERS.json,
-      ...HEADERS.cors,
-    },
+    headers: HEADERS.json,
   };
 };
 
