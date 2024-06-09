@@ -23,6 +23,6 @@ export class RegisterProductDto {
     if (!categoryId) return ["Missing categoryId"];
 
 
-    return [undefined, new RegisterProductDto(name, description, img, price, stock, size, status, categoryId)];
+    return [undefined, new RegisterProductDto(name, price, stock, size, status, categoryId, description, img)];
   }
 }
