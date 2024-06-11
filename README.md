@@ -36,7 +36,7 @@ ___
 ---
 
 ## Diagrama de arquitectura limpia
-Esta app see desarrollará bajo una arquitectura limpia incompleta, ya que no usaremos los _Datasources_, el patrón _Repository_ y lo adaptaremos según la estructura dada de las _Serverless Function_ de Netlify. Sin embargo, se usarán buenas prácticas de _Clean code_ y principios _SOLID_ que permitirá la mantenibilidad y escalabilidad de la aplicación.
+Esta app se desarrollará bajo una arquitectura limpia incompleta, ya que no usaremos los _Datasources_, el patrón _Repository_ y lo adaptaremos según la estructura dada de las _Serverless Function_ de Netlify. Sin embargo, se usarán buenas prácticas de _Clean code_ y principios _SOLID_ que permitirá la mantenibilidad y escalabilidad de la aplicación.
 
 ![arquitectura-limpia](https://www.redalyc.org/journal/3442/344268257016/344268257016_gf4.png)
 
