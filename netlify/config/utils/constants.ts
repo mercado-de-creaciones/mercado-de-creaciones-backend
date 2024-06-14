@@ -9,7 +9,7 @@ const CORS = {
 export const HEADERS = {
   json: {
     ...CORS,
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": "application/json",
   },
   cors: CORS,
 };
