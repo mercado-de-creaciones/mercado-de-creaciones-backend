@@ -4,3 +4,4 @@
 node_modules
 migrations
 deno.lock
+.hintrc
