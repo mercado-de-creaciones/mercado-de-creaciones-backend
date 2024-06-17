@@ -7,6 +7,13 @@ const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path } = event;
   const user = await validateJWT(event.headers.authorization!);
 
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: HEADERS.json,
+    };
+  }
+
    if (httpMethod === "GET" && path.includes("/profile")) {
     return user;
    }
