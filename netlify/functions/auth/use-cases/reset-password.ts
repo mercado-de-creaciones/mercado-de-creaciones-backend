@@ -51,6 +51,7 @@ export class ResetPassword implements ResetPasswordUseCase {
     `;
 
     const options = {
+      from: envs.MAILER_EMAIL,
       to: email,
       subject: "Mercado de Creaciones - Cambio de Contraseña",
       htmlBody,
