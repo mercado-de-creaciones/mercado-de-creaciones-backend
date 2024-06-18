@@ -10,6 +10,12 @@ const handler: Handler = async (event: HandlerEvent) => {
   const body = event.body ? fromBodyToObject(event.body) : {};
   const token = path.split("/").pop();
 
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: HEADERS.json,
+    };
+  }
 
   if (httpMethod === "POST" && path.includes("/register")) {
     const [error, registerUserDto] = RegisterUserDto.create(body);
