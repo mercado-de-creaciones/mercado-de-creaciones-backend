@@ -11,5 +11,4 @@ export const HEADERS = {
     ...CORS,
     "Content-Type": "application/json",
   },
-  cors: CORS,
 };

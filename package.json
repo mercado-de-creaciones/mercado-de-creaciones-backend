@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "netlify:dev": "netlify dev",
+    "netlify:build": "netlify build",
     "netlify:prod": "netlify deploy --prod",
     "drizzle:generate": "npx drizzle-kit generate",
     "drizzle:push": "npx drizzle-kit push",
