@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer";
 
 export interface SendMailOptions {
+  from: string;
   to: string | string[];
   subject: string;
   htmlBody: string;
@@ -16,11 +17,11 @@ export class EmailService {
   private transporter: Transporter;
 
   constructor(
-    mailerHost: string,
-    mailerService: string,
-    mailerEmail: string,
-    mailerPort: number,
-    senderEmailPassword: string,
+    public mailerHost: string,
+    public mailerService: string,
+    public mailerEmail: string,
+    public mailerPort: number,
+    public senderEmailPassword: string,
     private readonly postToProvider: boolean
   ) {
     this.transporter = nodemailer.createTransport({
@@ -36,6 +37,7 @@ export class EmailService {
   }
 
   async sendEmail({
+    from,
     to,
     subject,
     htmlBody,
@@ -44,6 +46,7 @@ export class EmailService {
     if (!this.postToProvider) return true;
 
     const mailOptions = {
+      from,
       to,
       subject,
       html: htmlBody,
@@ -52,7 +55,7 @@ export class EmailService {
 
     try {
       const sentInformation = await this.transporter.sendMail(mailOptions);
-      // console.log(sentInformation);
+      console.log(sentInformation);
 
       return true;
     } catch (error) {

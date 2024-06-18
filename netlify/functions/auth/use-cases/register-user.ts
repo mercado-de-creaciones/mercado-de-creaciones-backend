@@ -49,6 +49,7 @@ export class RegisterUser implements RegisterUserUseCase {
     `;
 
     const options = {
+      from: envs.MAILER_EMAIL,
       to: email,
       subject: "Mercado de Creaciones - Productos de mascotas",
       htmlBody,
@@ -86,7 +87,7 @@ export class RegisterUser implements RegisterUserUseCase {
       const password = BcriptAdapter.hash(dto.password);
 
       await Promise.all([
-        db.insert(usersTable).values({ ...dto, password }),
+        // db.insert(usersTable).values({ ...dto, password }),
         this.sendUserValidation(dto.email, dto.name),
       ]);
 

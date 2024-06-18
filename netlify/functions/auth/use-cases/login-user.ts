@@ -47,7 +47,7 @@ export class LoginUser implements LoginUserUseCase {
       headers: HEADERS.json,
     };
 
-    const token = await JwtAdapter.generateToken({ email: user.email }, "1d");
+    const token = await JwtAdapter.generateToken({ email: user.email }, "3d");
     if (!token) return {
       statusCode: 500,
       body: JSON.stringify({
