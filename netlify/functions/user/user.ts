@@ -6,16 +6,17 @@ import { HEADERS } from "../../config/utils";
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path } = event;
 
-  const user = await validateJWT(event.headers.authorization!);
-  if (user.statusCode !== 200) return user;
-
-
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
       headers: HEADERS.json,
     };
   }
+
+  const user = await validateJWT(event.headers.authorization!);
+  if (user.statusCode !== 200) return user;
+
+
 
    if (httpMethod === "GET" && path.includes("/profile")) {
     return user;
