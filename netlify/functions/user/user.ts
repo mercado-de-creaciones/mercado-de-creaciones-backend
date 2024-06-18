@@ -21,15 +21,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     return user;
   }
   
-  if (httpMethod === "GET" && path.includes("/edit-profile")) {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: "Edit profile",
-      }),
-      headers: HEADERS.json,
-    };
-  }
+  
 
 
   return {

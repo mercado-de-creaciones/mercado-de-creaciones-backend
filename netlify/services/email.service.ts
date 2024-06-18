@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer";
 
 export interface SendMailOptions {
+  from: string;
   to: string | string[];
   subject: string;
   htmlBody: string;
@@ -24,7 +25,7 @@ export class EmailService {
     private readonly postToProvider: boolean
   ) {
     this.transporter = nodemailer.createTransport({
-      // host: mailerHost,
+      host: mailerHost,
       service: mailerService,
       port: mailerPort,
       secure: true,
@@ -36,6 +37,7 @@ export class EmailService {
   }
 
   async sendEmail({
+    from,
     to,
     subject,
     htmlBody,
@@ -44,6 +46,7 @@ export class EmailService {
     if (!this.postToProvider) return true;
 
     const mailOptions = {
+      from,
       to,
       subject,
       html: htmlBody,
