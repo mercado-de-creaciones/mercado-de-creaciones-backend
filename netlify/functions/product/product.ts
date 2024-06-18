@@ -9,7 +9,7 @@ import { RegisterCategory } from "./use-cases/register-category";
 
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path, } = event;
-  const body = event.body ? fromBodyToObject(event.body) : {};
+  const body = event.body ? JSON.parse(event.body) : {};
   const token = path.split("/").pop();
 
 
@@ -22,20 +22,10 @@ const handler: Handler = async (event: HandlerEvent) => {
       .catch((error) => error);
   }
 
-  if (httpMethod === "POST" && path.includes("/register-product")) {
-
-    const rawBody = Object.keys(body)[0];
-
-    let parsedBody;
-    try {
-        parsedBody = JSON.parse(rawBody);
-    } catch (error) {
-        console.error("Error parsing JSON:", error);
-        return [error, null];
-    }
+  if (httpMethod === "POST" && path.includes("/register-product")) {    
   
 
-  const [error, registerProductDto] = RegisterProductDto.create(parsedBody);
+  const [error, registerProductDto] = RegisterProductDto.create(body);
 
 
     if (error)
@@ -54,19 +44,9 @@ const handler: Handler = async (event: HandlerEvent) => {
   }
 
   if (httpMethod === "POST" && path.includes("/register-category")) {
-
-    const rawBody = Object.keys(body)[0];
-
-    let parsedBody;
-    try {
-        parsedBody = JSON.parse(rawBody);
-    } catch (error) {
-        console.error("Error parsing JSON:", error);
-        return [error, null];
-    }
   
 
-  const [error, registerCategoryDto] = RegisterCategoryDto.create(parsedBody);
+  const [error, registerCategoryDto] = RegisterCategoryDto.create(body);
 
 
     if (error)
