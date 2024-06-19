@@ -1,7 +1,7 @@
 import { db } from "../../../data/db";
 import { usersTable } from "../../../data/schemas/user.schema";
 
-import { EmailService } from "../../../services";
+import { EmailService } from "../services";
 import { ResetPasswordDto } from "../dtos";
 
 import { JwtAdapter } from "../../../config/adapters";

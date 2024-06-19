@@ -1,7 +1,7 @@
 import { db } from "../../../data/db";
 import { usersTable } from "../../../data/schemas/user.schema";
 
-import { EmailService } from "../../../services";
+import { EmailService } from "../services";
 import { RegisterUserDto } from "../dtos";
 import { HEADERS } from "../../../config/utils";
 import { BcriptAdapter, JwtAdapter } from "../../../config/adapters";
@@ -18,7 +18,7 @@ export class RegisterUser implements RegisterUserUseCase {
   constructor(
     public readonly emailService: EmailService = new EmailService(
       envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL,
+      envs.SEND_EMAIL
     )
   ) {}
 
@@ -83,7 +83,7 @@ export class RegisterUser implements RegisterUserUseCase {
       const password = BcriptAdapter.hash(dto.password);
 
       await Promise.all([
-        db.insert(usersTable).values({ ...dto, password }),
+        // db.insert(usersTable).values({ ...dto, password }),
         this.sendUserValidation(dto.email, dto.name),
       ]);
 
