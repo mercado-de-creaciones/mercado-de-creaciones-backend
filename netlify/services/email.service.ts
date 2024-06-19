@@ -1,5 +1,13 @@
 import nodemailer, { Transporter } from "nodemailer";
 
+export interface EmailServiceOptions {
+  mailerHost: string;
+  mailerPort: number;
+  mailerUser: string;
+  senderEmailPassword: string;
+  readonly postToProvider: boolean;
+}
+
 export interface SendMailOptions {
   from: string;
   to: string | string[];
@@ -15,27 +23,24 @@ export interface Attachment {
 
 export class EmailService {
   private transporter: Transporter;
+  private postToProvider: boolean;
 
-  constructor(
-    public mailerHost: string,
-    public mailerService: string,
-    public mailerEmail: string,
-    public mailerPort: number,
-    public senderEmailPassword: string,
-    private readonly postToProvider: boolean
-  ) {
+  constructor({
+    mailerHost,
+    mailerPort,
+    mailerUser,
+    senderEmailPassword,
+    postToProvider,
+  }: EmailServiceOptions) {
+    this.postToProvider = postToProvider;
     this.transporter = nodemailer.createTransport({
       host: mailerHost,
-      service: mailerService,
       port: mailerPort,
       secure: true,
       auth: {
-        user: mailerEmail,
+        user: mailerUser,
         pass: senderEmailPassword,
       },
-      tls: {
-        rejectUnauthorized: false,
-      }
     });
   }
 

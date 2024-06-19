@@ -17,14 +17,13 @@ interface ResetPasswordUseCase {
 
 export class ResetPassword implements ResetPasswordUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService(
-      envs.MAILER_HOST,
-      envs.MAILER_SERVICE,
-      envs.MAILER_EMAIL,
-      envs.MAILER_PORT,
-      envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
-    )
+    public readonly emailService: EmailService = new EmailService({
+      mailerHost: envs.MAILER_HOST,
+      mailerPort: envs.MAILER_PORT,
+      mailerUser: envs.MAILER_USER,
+      senderEmailPassword: envs.MAILER_SECRET_KEY,
+      postToProvider: envs.SEND_EMAIL,
+    })
   ) {}
 
   private async sendPasswordValidation(email: string, userName: string) {

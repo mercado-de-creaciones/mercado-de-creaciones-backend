@@ -16,14 +16,13 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService(
-      envs.MAILER_HOST,
-      envs.MAILER_SERVICE,
-      envs.MAILER_EMAIL,
-      envs.MAILER_PORT,
-      envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
-    )
+    public readonly emailService: EmailService = new EmailService({
+      mailerHost: envs.MAILER_HOST,
+      mailerPort: envs.MAILER_PORT,
+      mailerUser: envs.MAILER_USER,
+      senderEmailPassword: envs.MAILER_SECRET_KEY,
+      postToProvider: envs.SEND_EMAIL,
+    })
   ) {}
 
   private sendUserValidation = async (email: string, userName: string) => {
@@ -87,7 +86,7 @@ export class RegisterUser implements RegisterUserUseCase {
       const password = BcriptAdapter.hash(dto.password);
 
       await Promise.all([
-        // db.insert(usersTable).values({ ...dto, password }),
+        db.insert(usersTable).values({ ...dto, password }),
         this.sendUserValidation(dto.email, dto.name),
       ]);
 
