@@ -1,4 +1,3 @@
-import nodemailer, { Transporter } from "nodemailer";
 
 export interface EmailServiceOptions {
   mailerHost: string;
@@ -22,27 +21,12 @@ export interface Attachment {
 }
 
 export class EmailService {
-  private transporter: Transporter;
-  private postToProvider: boolean;
+  private readonly mailerEndpoint: string = "https://api.resend.com/emails";
 
-  constructor({
-    mailerHost,
-    mailerPort,
-    mailerUser,
-    senderEmailPassword,
-    postToProvider,
-  }: EmailServiceOptions) {
-    this.postToProvider = postToProvider;
-    this.transporter = nodemailer.createTransport({
-      host: mailerHost,
-      port: mailerPort,
-      secure: true,
-      auth: {
-        user: mailerUser,
-        pass: senderEmailPassword,
-      },
-    });
-  }
+  constructor(
+    public senderEmailPassword: string,
+    private readonly postToProvider: boolean
+  ) {}
 
   async sendEmail({
     from,
@@ -62,7 +46,14 @@ export class EmailService {
     };
 
     try {
-      const sentInformation = await this.transporter.sendMail(mailOptions);
+      const sentInformation = await fetch(this.mailerEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.senderEmailPassword}`,
+        },
+        body: JSON.stringify(mailOptions),
+      });
       console.log(sentInformation);
 
       return true;

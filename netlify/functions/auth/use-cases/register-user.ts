@@ -16,13 +16,10 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService({
-      mailerHost: envs.MAILER_HOST,
-      mailerPort: envs.MAILER_PORT,
-      mailerUser: envs.MAILER_USER,
-      senderEmailPassword: envs.MAILER_SECRET_KEY,
-      postToProvider: envs.SEND_EMAIL,
-    })
+    public readonly emailService: EmailService = new EmailService(
+      envs.MAILER_SECRET_KEY,
+      envs.SEND_EMAIL,
+    )
   ) {}
 
   private sendUserValidation = async (email: string, userName: string) => {
