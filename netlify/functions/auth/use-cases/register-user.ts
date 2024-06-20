@@ -1,7 +1,7 @@
 import { db } from "../../../data/db";
 import { usersTable } from "../../../data/schemas/user.schema";
 
-import { EmailService } from "../services";
+import { EmailService } from "../../../services";
 import { RegisterUserDto } from "../dtos";
 import { HEADERS } from "../../../config/utils";
 import { BcriptAdapter, JwtAdapter } from "../../../config/adapters";
@@ -16,10 +16,13 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService(
-      envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
-    )
+    public readonly emailService: EmailService = new EmailService({
+      mailerHost: envs.MAILER_HOST,
+      mailerPort: envs.MAILER_PORT,
+      mailerUser: envs.MAILER_USER,
+      senderEmailPassword: envs.MAILER_SECRET_KEY,
+      postToProvider: envs.SEND_EMAIL,
+    })
   ) {}
 
   private sendUserValidation = async (email: string, userName: string) => {
@@ -51,7 +54,7 @@ export class RegisterUser implements RegisterUserUseCase {
       htmlBody,
     };
 
-    const isSent = this.emailService.sendEmail(options);
+    const isSent = await this.emailService.sendEmail(options);
     if (!isSent)
       return {
         statusCode: 500,

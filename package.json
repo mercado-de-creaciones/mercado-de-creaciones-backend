@@ -32,7 +32,8 @@
     "drizzle-orm": "^0.30.10",
     "env-var": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.13",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.14",
     "ws": "^8.17.0"
   }
 }
