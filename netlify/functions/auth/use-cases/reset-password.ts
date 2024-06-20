@@ -37,7 +37,7 @@ export class ResetPassword implements ResetPasswordUseCase {
         headers: HEADERS.json,
       };
 
-    const link = `${envs.FRONTEND_URL}/olvide-password/${token}`;
+    const link = `${envs.FRONTEND_URL}/auth/olvide-password/${token}`;
 
     const htmlBody = /*html*/ `
       <p>Hola: ${userName}, ¿olvidaste tu contraseña?</p>
