@@ -37,7 +37,7 @@ export class RegisterUser implements RegisterUserUseCase {
         headers: HEADERS.json,
       };
 
-    const link = `${envs.FRONTEND_URL}/confirmar/${token}`;
+    const link = `${envs.FRONTEND_URL}/auth/confirmar/${token}`;
     const htmlBody = /*html*/ `
       <p>Hola: ${userName}, comprueba tu cuenta en Mercado de Creaciones</p>
       <p>
