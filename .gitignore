@@ -1,7 +1,10 @@
 # Local Netlify folder
 .netlify
-.env
 node_modules
 migrations
+.env
+
 deno.lock
 .hintrc
+
+coverage
