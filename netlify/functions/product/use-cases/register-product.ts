@@ -1,10 +1,8 @@
 import { HandlerResponse } from "@netlify/functions";
 import { db } from "../../../data/db";
 import { productsTable } from "../../../data/schemas/products.schema";
-import { desc } from 'drizzle-orm';
 import { HEADERS } from "../../../config/utils";
-import { RegisterProductDto } from "../dtos/product.dto";
-import { log } from "console";
+import { RegisterProductDto } from "../dtos";
 
 
 interface RegisterProductUseCase {

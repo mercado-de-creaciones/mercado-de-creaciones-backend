@@ -1,4 +1,3 @@
-
 export class RegisterProductDto {
   private constructor(
     public name: string,

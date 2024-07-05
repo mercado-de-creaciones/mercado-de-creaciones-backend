@@ -1,8 +1,10 @@
+import { ProductDto } from "./db-product.dto";
 
 export class RegisterCategoryDto {
     private constructor(
         public name: string,
-        public active?: boolean
+        public products: ProductDto[],
+        public active?: boolean,
     ) { }
 
 
@@ -12,6 +14,6 @@ export class RegisterCategoryDto {
         if (!name) return ["Missing name"];
 
 
-        return [undefined, new RegisterCategoryDto(name, active)];
+        return [undefined, new RegisterCategoryDto(name, [], active)];
     }
 }

@@ -1,22 +1,27 @@
 import { Handler, HandlerEvent } from "@netlify/functions";
-import { HEADERS, fromBodyToObject } from "../../config/utils";
-import { RecentProducts } from "./use-cases/recent-products";
-import { RegisterProduct } from "./use-cases/register-product";
-import { RegisterProductDto } from "./dtos/product.dto";
-import { parse } from "path";
-import { RegisterCategoryDto } from "./dtos/category.dto";
-import { RegisterCategory } from "./use-cases/register-category";
+import { HEADERS } from "../../config/utils";
+import { RecentProducts, RecentProductsByCategory, RegisterCategory, RegisterProduct } from "./use-cases";
+import { RegisterProductDto } from "./dtos/register-product.dto";
+import { RegisterCategoryDto } from "./dtos/register-category.dto";
 
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path, } = event;
   const body = event.body ? JSON.parse(event.body) : {};
-  const token = path.split("/").pop();
 
 
   if (httpMethod === "GET" && path.includes("/recent-products")) {
-
+    console.log("recent");
+    
 
     return new RecentProducts()
+      .execute()
+      .then((res) => res)
+      .catch((error) => error);
+  }
+
+  if (httpMethod === "GET" && path.includes("/last-product-by-category")) {
+
+    return new RecentProductsByCategory()
       .execute()
       .then((res) => res)
       .catch((error) => error);
