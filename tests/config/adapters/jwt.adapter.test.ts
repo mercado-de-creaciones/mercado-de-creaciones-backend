@@ -14,7 +14,7 @@ describe("Probar jwt.adapter.ts", () => {
       const payload = { email: "prueba@gmail.com" };
       const token = (await JwtAdapter.generateToken(payload, "2h")) as string;
       const decoded = await JwtAdapter.validateToken<typeof payload>(token);
-      console.log(decoded);
+      
       expect(decoded).toEqual(expect.objectContaining(payload));
     });
 
