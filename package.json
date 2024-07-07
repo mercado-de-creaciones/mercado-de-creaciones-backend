@@ -12,7 +12,7 @@
     "drizzle:introspect": "npx drizzle-kit introspect",
     "drizzle:studio": "npx drizzle-kit studio",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --detectOpenHandles",
     "test:coverage": "jest --coverage"
   },
   "keywords": [],

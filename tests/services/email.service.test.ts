@@ -47,7 +47,7 @@ describe("Probar EmailService", () => {
   });
 
   test("Debe manejar un error cuando falla el envío de un email", async () => {
-    mockSendEmail.mockRejectedValue(new Error("Failed to send email"));
+    mockSendEmail.mockRejectedValue("Failed to send email");
 
     const emailService = new EmailService({
       mailerHost: "smtp.example.com",
