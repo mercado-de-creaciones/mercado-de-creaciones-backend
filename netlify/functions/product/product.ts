@@ -76,6 +76,12 @@ const handler: Handler = async (event: HandlerEvent) => {
       .then((res) => res)
       .catch((error) => error);
   }
+
+  return {
+    statusCode: 404,
+    body: JSON.stringify({ mensaje: "Ruta no encontrada" }),
+    headers: HEADERS.json,
+  };
 }
 
 export { handler };

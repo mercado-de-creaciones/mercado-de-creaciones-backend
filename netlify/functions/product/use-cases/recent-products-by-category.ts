@@ -4,7 +4,6 @@ import { productsTable } from "../../../data/schemas/products.schema";
 import { HEADERS } from "../../../config/utils";
 import { categoriesTable } from "../../../data/schemas/categories.schema";
 import { eq } from "drizzle-orm";
-import { CategoryDto } from "../dtos";
 
 
 interface RecentProductsByCategoryUseCase {
@@ -20,15 +19,12 @@ export class RecentProductsByCategory implements RecentProductsByCategoryUseCase
 
         categories.filter((category) => category.active === true)
 
-
-        let productsByCategory: CategoryDto[] = [];
-
         const promises = categories.map(async (currentCategory) => {
             let product = await db.select().from(productsTable).limit(1).where(eq(productsTable.categoryId, currentCategory.id));
             return { ...currentCategory, products: product, active: true };
         });
 
-        productsByCategory = await Promise.all(promises);
+        const productsByCategory = await Promise.all(promises);
 
         return {
             statusCode: 200,

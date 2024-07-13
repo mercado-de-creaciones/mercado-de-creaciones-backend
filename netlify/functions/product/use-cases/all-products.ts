@@ -17,28 +17,35 @@ export class AllProducts implements AllProductsUseCase {
 
         let { page = 1, size = 10 } = queryParams;
 
-        const totalProducts = (await db.select({ count: count() }).from(productsTable))[0].count;
+            const totalProducts = (await db.select({ count: count() }).from(productsTable))[0].count;
 
-        const products = await db
-            .select()
-            .from(productsTable)
-            .limit(size)
-            .offset((page - 1) * size);
-            
-        const hasPrev = page != 1;
-        const hasNext = totalProducts >= size * page;
-        
-        const response = ProductPaginationDto.create(page, size, hasPrev, hasNext, products);
+            if (totalProducts === 0) {
+                return {
+                    statusCode: 204,
+                    headers: HEADERS.json,
+                };
+            }
+
+            const products = await db
+                .select()
+                .from(productsTable)
+                .limit(size)
+                .offset((page - 1) * size);
+
+            const hasPrev = page != 1;
+            const hasNext = totalProducts >= size * page;
+
+            const response = ProductPaginationDto.create(page, size, hasPrev, hasNext, products);
 
 
-        return {
-            statusCode: 400,
-            body: JSON.stringify({
-                response
-            }),
-            headers: HEADERS.json,
-        };
-            
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    response
+                }),
+                headers: HEADERS.json,
+            };
+
     }
 
 
