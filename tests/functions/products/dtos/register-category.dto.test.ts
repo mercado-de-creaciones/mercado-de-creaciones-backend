@@ -1,5 +1,4 @@
 import { RegisterCategoryDto } from "../../../../netlify/functions/product/dtos/register-category.dto";
-import { ProductDto } from "../../../../netlify/functions/product/dtos/db-product.dto";
 
 describe('Probar RegisterCategoryDto', () => {
         test('Debe crear una instancia de RegisterCategoryDto cuando todos los campos son válidos', () => {
