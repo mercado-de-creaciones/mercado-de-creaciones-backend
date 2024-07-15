@@ -2,15 +2,21 @@ import { ProductDto } from "./db-product.dto";
 
 export class ProductPaginationDto {
     private constructor(
-        public page: Number,
-        public size: Number,
+        public page: number,
+        public size: number,
         public products: ProductDto[],
         public hasPrev?: boolean,
         public hasNext?: boolean,
     ) { }
 
-    static create(page: Number, size: Number, hasPrev: boolean, hasNext: boolean, products: ProductDto[]): ProductPaginationDto {
+    static create(object: { [key: string]: any }): [string?, ProductPaginationDto?] {
+        const { page, size, hasPrev, hasNext, products} = object;
 
-        return new ProductPaginationDto(page, size, products, hasPrev, hasNext );
+
+        if (!page || page <= 0) return ["Invalid page number"];
+        if (!size || size <= 0) return ["Invalid size"];
+
+
+        return [undefined, new ProductPaginationDto(page, size, products, hasPrev, hasNext )];
     }
 }

@@ -35,13 +35,22 @@ export class AllProducts implements AllProductsUseCase {
             const hasPrev = page != 1;
             const hasNext = totalProducts >= size * page;
 
-            const response = ProductPaginationDto.create(page, size, hasPrev, hasNext, products);
+            const object = {page, size, hasPrev, hasNext, products};
 
+            const [error, productPaginationDto] = ProductPaginationDto.create(object);
+
+            if (error) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error }),
+                    headers: HEADERS.json,
+                };
+            }
 
             return {
                 statusCode: 200,
                 body: JSON.stringify({
-                    response
+                    productPaginationDto
                 }),
                 headers: HEADERS.json,
             };

@@ -1,11 +1,10 @@
 import { RegisterCategoryDto } from "../../../../netlify/functions/product/dtos/register-category.dto";
+import { registerCategoryMocks } from "../../../_mocks_/products/dtoMocks";
+import { emptyObject } from "../../../_mocks_/sharedMocks";
 
 describe('Probar RegisterCategoryDto', () => {
         test('Debe crear una instancia de RegisterCategoryDto cuando todos los campos son válidos', () => {
-            const mockData = {
-                name: 'Category Name',
-                active: true,
-            };
+            const mockData = registerCategoryMocks.validMockData;
 
             const [error, categoryDto] = RegisterCategoryDto.create(mockData);
 
@@ -17,8 +16,7 @@ describe('Probar RegisterCategoryDto', () => {
         });
 
         test('Debe retornar un mensaje de error cuando falta el nombre', () => {
-            const mockData = {
-            };
+            const mockData = emptyObject;
 
             const [error, categoryDto] = RegisterCategoryDto.create(mockData);
 
@@ -27,10 +25,7 @@ describe('Probar RegisterCategoryDto', () => {
         });
 
         test('Debe crear una instancia de RegisterCategoryDto inactiva cuando active = false', () => {
-            const mockData = {
-                name: 'Category Name',
-                active: false,
-            };
+            const mockData = registerCategoryMocks.validMockDataInactive;
 
             const [error, categoryDto] = RegisterCategoryDto.create(mockData);
 
