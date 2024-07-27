@@ -4,6 +4,7 @@ import { db } from "../../../data/db";
 import { productsTable } from "../../../data/schemas/products.schema";
 import { ProductPaginationDto } from "../dtos";
 import { count } from 'drizzle-orm';
+import { ProductRepository } from "../../../services";
 
 
 
@@ -13,24 +14,26 @@ interface AllProductsUseCase {
 
 export class AllProducts implements AllProductsUseCase {
 
+
+    productRepository: ProductRepository = new ProductRepository();
+
     public async execute(queryParams: { [key: string]: any }): Promise<HandlerResponse> {
 
         let { page = 1, size = 10 } = queryParams;
 
-            const totalProducts = (await db.select({ count: count() }).from(productsTable))[0].count;
+        
+            const totalProducts = await this.productRepository.countProducts();
 
+            console.log(totalProducts);
             if (totalProducts === 0) {
+                console.log('No products found, returning 204');
                 return {
                     statusCode: 204,
                     headers: HEADERS.json,
                 };
             }
 
-            const products = await db
-                .select()
-                .from(productsTable)
-                .limit(size)
-                .offset((page - 1) * size);
+            const products = await this.productRepository.getProducts(size, (page - 1) * size);
 
             const hasPrev = page != 1;
             const hasNext = totalProducts >= size * page;

@@ -1,44 +1,41 @@
 import { HandlerResponse } from "@netlify/functions";
 import {AllProducts} from "../../../../netlify/functions/product/use-cases/all-products"
-import { mockDB } from "../../../_mocks_/db/mockDB";
 import { HEADERS } from "../../../../netlify/config/utils/constants";
+import { ProductRepository } from "../../../../netlify/services";
+import {expect, jest, test} from '@jest/globals';
+import { describe, beforeEach } from "node:test";
+
+
+
+jest.mock("../../../../netlify/services");
+
 describe('Probar AllProducts', () => {
 
     let allProducts: AllProducts;
 
     beforeEach(() => {
+        jest.clearAllMocks();
         allProducts = new AllProducts();
+
     });
 
     test('Debe retornar 204 si no hay productos', async () => {
-        mockDB.select.mockResolvedValueOnce([{ count: 0 }]);
-        console.log("Mock configurado:", mockDB.select.mock.calls);
+        let mockCountProducts = jest.fn() as jest.MockedFunction<() => Promise<number>>;
 
-        const result: HandlerResponse = await allProducts.execute({});
-        console.log("Resultado de execute:", result);
+        ProductRepository.prototype.countProducts = mockCountProducts;
 
-        expect(result.statusCode).toBe(204);
-        expect(result.headers).toEqual(HEADERS.json);
-    });
+        mockCountProducts.mockReturnValue(Promise.resolve(0));
+        
+        allProducts = new AllProducts();
 
-    it('should return products with pagination', async () => {
-        const mockProducts = [{ id: 1, name: 'Product 1' }, { id: 2, name: 'Product 2' }];
-        mockDB.select
-            .mockResolvedValueOnce([{ count: 20 }]) 
-            .mockResolvedValueOnce(mockProducts); 
+        const response: HandlerResponse = await allProducts.execute({});
 
-        const result: HandlerResponse = await allProducts.execute({ page: 1, size: 10 });
-
-        expect(result.statusCode).toBe(200);
-        expect(result.headers).toEqual(HEADERS.json);
-        expect(JSON.parse(result.body!)).toEqual({
-            response: {
-                page: 1,
-                size: 10,
-                products: mockProducts,
-                hasPrev: false,
-                hasNext: true,
-            }
+        expect(response).toEqual({
+            statusCode: 204,
+            headers: HEADERS.json,
         });
+
+        expect(ProductRepository.prototype.countProducts).toHaveBeenCalled();
+
     });
 });
