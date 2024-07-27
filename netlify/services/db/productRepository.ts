@@ -1,6 +1,7 @@
 import { db } from "../../data/db";
 import { productsTable } from "../../data/schemas/products.schema";
 import { count } from 'drizzle-orm';
+import { ProductDto } from "../../functions/product/dtos";
 
 export class ProductRepository {
 
@@ -15,12 +16,14 @@ export class ProductRepository {
     }
 
     public async getProducts(size: number, offset: number){
+        let result: ProductDto[];
         try{
-            const result = await db
+            result = await db
             .select()
             .from(productsTable)
             .limit(size)
             .offset(offset);
+            return result;
         } catch (error) {
             console.error('Error al recuperar productos de la db: ', error);
             throw new Error('Ocurrió un error al contar productoscon la db');

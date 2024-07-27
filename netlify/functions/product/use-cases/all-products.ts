@@ -24,9 +24,7 @@ export class AllProducts implements AllProductsUseCase {
         
             const totalProducts = await this.productRepository.countProducts();
 
-            console.log(totalProducts);
             if (totalProducts === 0) {
-                console.log('No products found, returning 204');
                 return {
                     statusCode: 204,
                     headers: HEADERS.json,
