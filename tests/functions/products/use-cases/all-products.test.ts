@@ -70,6 +70,7 @@ describe('Probar AllProducts', () => {
             headers: HEADERS.json,
         });
 
+        
         expect(ProductRepository.prototype.countProducts).toHaveBeenCalled();
 
     });
