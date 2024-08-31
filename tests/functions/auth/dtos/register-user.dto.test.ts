@@ -1,7 +1,7 @@
 import { RegisterUserDto } from "../../../../netlify/functions/auth/dtos/register-user.dto";
 
 describe("Probar RegisterUserDto", () => {
-  test("Debe crear de forma exitosa un usuario cuando todos los campos son válidos", () => {
+  test("Debería crear de forma exitosa un usuario cuando todos los campos son válidos", () => {
     const [error, dto] = RegisterUserDto.create({
       name: "John Doe",
       email: "prueba@example.com",
@@ -13,7 +13,7 @@ describe("Probar RegisterUserDto", () => {
     expect(dto?.email).toBe("prueba@example.com");
   });
 
-  test("Debe fallar al crear un usuario cuando falta el nombre", () => {
+  test("Debería fallar al crear un usuario cuando falta el nombre", () => {
     const [error] = RegisterUserDto.create({
       email: "prueba@example.com",
       password: "password123",
@@ -23,7 +23,7 @@ describe("Probar RegisterUserDto", () => {
     expect(error).toBe(errorMessage);
   });
 
-  test("Debe fallar  al crear un usuario cuando falta el email", () => {
+  test("Debería fallar  al crear un usuario cuando falta el email", () => {
     const [error] = RegisterUserDto.create({
       name: "John Doe",
       password: "password123",
@@ -34,7 +34,7 @@ describe("Probar RegisterUserDto", () => {
     expect(error).toBe(errorMessage);
   });
 
-  test("Debe fallar al crear un usuario cuando el email no es válido", () => {
+  test("Debería fallar al crear un usuario cuando el email no es válido", () => {
     const [error] = RegisterUserDto.create({
       name: "John Doe",
       email: "invalid-email",
@@ -46,7 +46,7 @@ describe("Probar RegisterUserDto", () => {
     expect(error).toBe(errorMessage);
   });
 
-  test("Debe fallar al crear un usuario cuando falta la contraseña", () => {
+  test("Debería fallar al crear un usuario cuando falta la contraseña", () => {
     const [error] = RegisterUserDto.create({
       name: "John Doe",
       email: "prueba@example.com",
@@ -57,7 +57,7 @@ describe("Probar RegisterUserDto", () => {
     expect(error).toBe(errorMessage);
   });
 
-  test("Debe fallar al crear un usuario cuando la contraseña es menor a 6 caracteres", () => {
+  test("Debería fallar al crear un usuario cuando la contraseña es menor a 6 caracteres", () => {
     const [error] = RegisterUserDto.create({
       name: "John Doe",
       email: "prueba@example.com",

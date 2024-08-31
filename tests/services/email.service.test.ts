@@ -1,4 +1,6 @@
-import { EmailService } from '../../netlify/services/email.service';
+import { EmailService } from '../../netlify/services';
+import { envs } from '../../netlify/config/envs';
+
 import nodemailer from "nodemailer";
 
 describe("Probar EmailService", () => {
@@ -14,12 +16,17 @@ describe("Probar EmailService", () => {
     htmlBody: "<p>Test Body</p>",
   };
 
-  test("No debe enviar un email cuando 'postToProvider' es 'false'", async () => {
+  const emailServiceOptions = {
+    mailerHost: envs.MAILER_HOST,
+    mailerPort: envs.MAILER_PORT,
+    mailerUser: envs.MAILER_USER,
+    senderEmailPassword: envs.MAILER_SECRET_KEY,
+    postToProvider: true,
+  };
+
+  test("No debería enviar un email cuando 'postToProvider' es 'false'", async () => {
     const emailService = new EmailService({
-      mailerHost: "smtp.example.com",
-      mailerPort: 587,
-      mailerUser: "user@example.com",
-      senderEmailPassword: "password",
+      ...emailServiceOptions,
       postToProvider: false,
     });
 
@@ -29,16 +36,11 @@ describe("Probar EmailService", () => {
     expect(mockSendEmail).not.toHaveBeenCalled();
   });
 
-  test("Debe enviar un email cuando 'postToProvider' es 'true'", async () => {
+  test("Debería enviar un email cuando 'postToProvider' es 'true'", async () => {
+    // Hace que la funcion mock asincrona devuelva un valor al resolverse 
     mockSendEmail.mockResolvedValue("Email sent");
 
-    const emailService = new EmailService({
-      mailerHost: "smtp.example.com",
-      mailerPort: 587,
-      mailerUser: "user@example.com",
-      senderEmailPassword: "password",
-      postToProvider: true,
-    });
+    const emailService = new EmailService(emailServiceOptions);
 
     const result = await emailService.sendEmail(sendEmailOptions);
 
@@ -46,16 +48,11 @@ describe("Probar EmailService", () => {
     expect(mockSendEmail).toHaveBeenCalled();
   });
 
-  test("Debe manejar un error cuando falla el envío de un email", async () => {
+  test("Debería manejar un error cuando falla el envío de un email", async () => {
+    // Hace que la funcion mock asincrona devuelva un valor al rechazarse
     mockSendEmail.mockRejectedValue("Failed to send email");
 
-    const emailService = new EmailService({
-      mailerHost: "smtp.example.com",
-      mailerPort: 587,
-      mailerUser: "user@example.com",
-      senderEmailPassword: "password",
-      postToProvider: true,
-    });
+    const emailService = new EmailService(emailServiceOptions);
 
     const result = await emailService.sendEmail(sendEmailOptions);
 
@@ -63,16 +60,10 @@ describe("Probar EmailService", () => {
     expect(mockSendEmail).toHaveBeenCalled();
   });
 
-  test("Debe enviar un email con un archivo adjunto", async () => {
+  test("Debería enviar un email con un archivo adjunto", async () => {
     mockSendEmail.mockResolvedValue("Email sent");
 
-    const emailService = new EmailService({
-      mailerHost: "smtp.example.com",
-      mailerPort: 587,
-      mailerUser: "user@example.com",
-      senderEmailPassword: "password",
-      postToProvider: true,
-    });
+    const emailService = new EmailService(emailServiceOptions);
 
     const attachments = [
       {

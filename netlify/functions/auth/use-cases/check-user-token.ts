@@ -1,5 +1,4 @@
-
-import { db } from "../../../data/db";
+import { UserService } from "../../../services";
 import { usersTable } from "../../../data/schemas/user.schema";
 
 import { JwtAdapter } from "../../../config/adapters";
@@ -7,13 +6,13 @@ import { HEADERS } from "../../../config/utils";
 import { EmailResponse } from "../../../interfaces/response.interface";
 
 import { HandlerResponse } from "@netlify/functions";
-import { eq } from "drizzle-orm";
 
 interface CheckUserTokenUseCase {
   execute: (token: string) => Promise<HandlerResponse>;
 }
 
 export class CheckUserToken implements CheckUserTokenUseCase {
+  constructor(private readonly userService: UserService = new UserService()) {}
 
   public async execute(token: string): Promise<HandlerResponse> {
     const payload = await JwtAdapter.validateToken<EmailResponse>(token);
@@ -37,10 +36,7 @@ export class CheckUserToken implements CheckUserTokenUseCase {
         headers: HEADERS.json,
       };
 
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
+    const user = await this.userService.findOne(usersTable.email, email);
 
     if (!user)
       return {
@@ -50,13 +46,12 @@ export class CheckUserToken implements CheckUserTokenUseCase {
         }),
         headers: HEADERS.json,
       };
-    
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: "Token válido",
       }),
-      headers: HEADERS.json
-    }
+      headers: HEADERS.json,
+    };
   }
 }

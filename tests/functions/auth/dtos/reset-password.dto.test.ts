@@ -1,7 +1,7 @@
 import { ResetPasswordDto } from "../../../../netlify/functions/auth/dtos/reset-password.dto";
 
 describe("Probar ResetPasswordDto", () => {
-  test("Debe crear de forma exitosa un email cuando todos los campos son válidos", () => {
+  test("Debería crear de forma exitosa un email cuando todos los campos son válidos", () => {
     const [error, dto] = ResetPasswordDto.create({
       email: "prueba@example.com",
     });
@@ -11,7 +11,7 @@ describe("Probar ResetPasswordDto", () => {
     expect(dto?.email).toBe("prueba@example.com");
   });
 
-  test("Debe fallar al crear un usuario cuando falta el email", () => {
+  test("Debería fallar al crear un usuario cuando falta el email", () => {
     const [error] = ResetPasswordDto.create({});
 
     const errorMessage = "Missing email";
@@ -19,7 +19,7 @@ describe("Probar ResetPasswordDto", () => {
     expect(error).toBe(errorMessage);
   });
 
-  test("Debe fallar al crear un usuario cuando el email no es válido", () => {
+  test("Debería fallar al crear un usuario cuando el email no es válido", () => {
     const [error] = ResetPasswordDto.create({
       email: "invalid-email",
     });

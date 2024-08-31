@@ -1,4 +1,4 @@
-import { BcriptAdapter } from "../../../netlify/config/adapters/bcript.adapter";
+import { BcriptAdapter } from "../../../netlify/config/adapters";
 
 describe("Probar bcript.adapter.ts", () => {
   describe("hash", () => {
@@ -11,16 +11,16 @@ describe("Probar bcript.adapter.ts", () => {
   });
 
   describe("compare", () => {
-    test("Debe devolver 'true' si la contraseña coincide con el hash", () => {
+    test("Debería devolver 'true' si la contraseña coincide con el hash", () => {
       const password = "testPassword";
       const hash = BcriptAdapter.hash(password);
 
       const result = BcriptAdapter.compare(password, hash);
 
-      expect(result).toBe(true);
+      expect(result).toBeTruthy();
     });
 
-    test("Debe devolver 'false' si la contraseña no coincide con el hash", () => {
+    test("Debería devolver 'false' si la contraseña no coincide con el hash", () => {
       const password = "testPassword";
       const wrongPassword = "wrongPassword";
       const hash = BcriptAdapter.hash(password);

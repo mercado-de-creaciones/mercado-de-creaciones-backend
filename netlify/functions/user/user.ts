@@ -1,5 +1,6 @@
 import { Handler, HandlerEvent } from "@netlify/functions";
-import { validateJWT } from "../../middlewares/auth.middleware";
+
+import { validateJWT } from "../../middlewares";
 import { HEADERS } from "../../config/utils";
 
 

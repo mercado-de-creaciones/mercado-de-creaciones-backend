@@ -1,13 +1,15 @@
-import { db } from "../data/db";
-import { usersTable } from "../data/schemas/user.schema";
 
-import { JwtAdapter } from "../config/adapters";
-import { HEADERS } from "../config/utils";
-import { EmailResponse } from "../interfaces/response.interface";
+import { UserService } from '../services/user.service';
+import { usersTable } from '../data/schemas/user.schema';
 
-import { eq } from "drizzle-orm";
+import { JwtAdapter } from '../config/adapters/jwt.adapter';
+
+import { EmailResponse } from '../interfaces/response.interface';
+import { HEADERS } from '../config/utils/constants';
 
 export const validateJWT = async (authorization: string) => {
+  const userService = new UserService();
+
   if (!authorization) {
     return {
       statusCode: 401,
@@ -36,19 +38,15 @@ export const validateJWT = async (authorization: string) => {
       };
     }
 
-    const response = await db
-      .select({
-        id: usersTable.id,
-        name: usersTable.name,
-        email: usersTable.email,
-        emailValidated: usersTable.emailValidated,
-        role: usersTable.role,
-        img: usersTable.img,
-      })
-      .from(usersTable)
-      .where(eq(usersTable.email, payload.email));
-    
-    const user = response?.at(0);
+    const user = await userService.findOne(usersTable.email, payload.email, {
+      id: usersTable.id,
+      name: usersTable.name,
+      email: usersTable.email,
+      emailValidated: usersTable.emailValidated,
+      role: usersTable.role,
+      img: usersTable.img,
+    });
+
     if (!user) {
       return {
         statusCode: 401,
@@ -63,7 +61,7 @@ export const validateJWT = async (authorization: string) => {
       headers: HEADERS.json,
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: "Internal server error" }),

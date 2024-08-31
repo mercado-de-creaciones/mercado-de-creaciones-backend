@@ -1,7 +1,7 @@
 import { ChangePasswordDto } from "../../../../netlify/functions/auth/dtos/change-password.dto";
 
 describe("Probar ChangePasswordDto", () => {
-  test("Debe crear de forma exitosa un nuevo password cuando todos los campos son válidos", () => {
+  test("Debería crear de forma exitosa un nuevo password cuando todos los campos son válidos", () => {
     const [error, dto] = ChangePasswordDto.create({
       newPassword: "password123456",
     });
@@ -11,7 +11,7 @@ describe("Probar ChangePasswordDto", () => {
     expect(dto?.newPassword).toBe("password123456");
   });
 
- test("Debe fallar al crear un usuario cuando falta la contraseña", () => {
+ test("Debería fallar al crear un usuario cuando falta la contraseña", () => {
    const [error] = ChangePasswordDto.create({});
 
    const errorMessage = "Missing new password";
@@ -19,7 +19,7 @@ describe("Probar ChangePasswordDto", () => {
    expect(error).toBe(errorMessage);
  });
 
- test("Debe fallar al crear un usuario cuando la contraseña es menor a 6 caracteres", () => {
+ test("Debería fallar al crear un usuario cuando la contraseña es menor a 6 caracteres", () => {
    const [error] = ChangePasswordDto.create({
      newPassword: "pass",
    });
