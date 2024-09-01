@@ -35,15 +35,7 @@ export class AllProducts implements AllProductsUseCase {
 
             const object = {page, size, hasPrev, hasNext, products};
 
-            const [error, productPaginationDto] = ProductPaginationDto.create(object);
-
-            if (error) {
-                return {
-                    statusCode: 400,
-                    body: JSON.stringify({ error }),
-                    headers: HEADERS.json,
-                };
-            }
+            const [, productPaginationDto] = ProductPaginationDto.create(object);
 
             return {
                 statusCode: 200,

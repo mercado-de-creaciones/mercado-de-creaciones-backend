@@ -1,11 +1,12 @@
 import { HandlerResponse } from "@netlify/functions";
 import {AllProducts} from "../../../../netlify/functions/product/use-cases/all-products"
 import { HEADERS } from "../../../../netlify/config/utils/constants";
-import { ProductRepository } from "../../../../netlify/services";
+import { ProductService } from "../../../../netlify/services";
 import {expect, jest, test} from '@jest/globals';
 import { describe, beforeEach } from "node:test";
 import { ProductDto } from "../../../../netlify/functions/product/dtos";
 import { mockProducts } from "../../../_mocks_/db/productsTable";
+import { FindAllOptionsDto } from "../../../../netlify/functions/product/dtos/findAll-options.dto";
 
 
 
@@ -21,10 +22,10 @@ describe('Probar AllProducts', () => {
 
     });
 
-    test('Debe retornar 204 si no hay productos', async () => {
+    test('Debería retornar 204 si no hay productos', async () => {
         let mockCountProducts = jest.fn() as jest.MockedFunction<() => Promise<number>>;
 
-        ProductRepository.prototype.countProducts = mockCountProducts;
+        ProductService.prototype.count = mockCountProducts;
 
         mockCountProducts.mockReturnValue(Promise.resolve(0));
 
@@ -37,17 +38,17 @@ describe('Probar AllProducts', () => {
             headers: HEADERS.json,
         });
 
-        expect(ProductRepository.prototype.countProducts).toHaveBeenCalled();
+        expect(ProductService.prototype.count).toHaveBeenCalled();
 
     });
 
 
-    test('Debe retornar 200 y los productos', async () => {
+    test('Debería retornar 200 y los productos', async () => {
         let mockCountProducts = jest.fn() as jest.MockedFunction<() => Promise<number>>;
-        let mockGetProducts = jest.fn() as jest.MockedFunction<(size: number, offset: number) => Promise<ProductDto[]>>;
+        let mockGetProducts = jest.fn() as jest.MockedFunction<(options: FindAllOptionsDto) => Promise<ProductDto[]>>;
 
-        ProductRepository.prototype.countProducts = mockCountProducts;
-        ProductRepository.prototype.getProducts = mockGetProducts;
+        ProductService.prototype.count = mockCountProducts;
+        ProductService.prototype.findAll = mockGetProducts;
         
         mockCountProducts.mockReturnValue(Promise.resolve(mockProducts.length));
         mockGetProducts.mockReturnValue(Promise.resolve(mockProducts));
@@ -71,7 +72,7 @@ describe('Probar AllProducts', () => {
         });
 
         
-        expect(ProductRepository.prototype.countProducts).toHaveBeenCalled();
+        expect(ProductService.prototype.count).toHaveBeenCalled();
 
     });
 });
