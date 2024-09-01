@@ -1,6 +1,15 @@
 import nodemailer, { Transporter } from "nodemailer";
 
+export interface EmailServiceOptions {
+  mailerHost: string;
+  mailerPort: number;
+  mailerUser: string;
+  senderEmailPassword: string;
+  readonly postToProvider: boolean;
+}
+
 export interface SendMailOptions {
+  from: string;
   to: string | string[];
   subject: string;
   htmlBody: string;
@@ -14,28 +23,30 @@ export interface Attachment {
 
 export class EmailService {
   private transporter: Transporter;
+  private postToProvider: boolean;
 
-  constructor(
-    mailerHost: string,
-    mailerService: string,
-    mailerEmail: string,
-    mailerPort: number,
-    senderEmailPassword: string,
-    private readonly postToProvider: boolean
-  ) {
+  constructor({
+    mailerHost,
+    mailerPort,
+    mailerUser,
+    senderEmailPassword,
+    postToProvider,
+  }: EmailServiceOptions) {
+    this.postToProvider = postToProvider;
+
     this.transporter = nodemailer.createTransport({
       host: mailerHost,
-      service: mailerService,
-      port: mailerPort,
       secure: true,
+      port: mailerPort,
       auth: {
-        user: mailerEmail,
+        user: mailerUser,
         pass: senderEmailPassword,
       },
     });
   }
 
   async sendEmail({
+    from,
     to,
     subject,
     htmlBody,
@@ -44,6 +55,7 @@ export class EmailService {
     if (!this.postToProvider) return true;
 
     const mailOptions = {
+      from,
       to,
       subject,
       html: htmlBody,
@@ -56,7 +68,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false;
     }
   }

@@ -17,10 +17,16 @@ export const usersTable = pgTable("users", {
   email: varchar("email").notNull().unique(),
   password: varchar("password").notNull(),
   img: varchar("img"),
-  role: rolesEnum("roles").default("USER_ROLE"),
+  role: rolesEnum("role").default("USER_ROLE"),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt')
 });
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+
+
+
+
+

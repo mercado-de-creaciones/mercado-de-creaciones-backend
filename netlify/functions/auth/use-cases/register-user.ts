@@ -1,14 +1,13 @@
-import { db } from "../../../data/db";
-import { usersTable } from "../../../data/schemas/user.schema";
+import { EmailService, UserService } from "../../../services";
+import { usersTable } from '../../../data/schemas/user.schema';
 
-import { EmailService } from "../../../services";
 import { RegisterUserDto } from "../dtos";
 import { HEADERS } from "../../../config/utils";
 import { BcriptAdapter, JwtAdapter } from "../../../config/adapters";
 import { envs } from "../../../config/envs";
 
 import { HandlerResponse } from "@netlify/functions";
-import { eq } from "drizzle-orm";
+
 
 interface RegisterUserUseCase {
   execute(dto: RegisterUserDto): Promise<HandlerResponse>;
@@ -16,28 +15,21 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService(
-      envs.MAILER_HOST,
-      envs.MAILER_SERVICE,
-      envs.MAILER_EMAIL,
-      envs.MAILER_PORT,
-      envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
-    )
+    private readonly userService: UserService = new UserService(),
+    private readonly emailService: EmailService = new EmailService({
+      mailerHost: envs.MAILER_HOST,
+      mailerPort: envs.MAILER_PORT,
+      mailerUser: envs.MAILER_USER,
+      senderEmailPassword: envs.MAILER_SECRET_KEY,
+      postToProvider: envs.SEND_EMAIL,
+    })
   ) {}
 
   private sendUserValidation = async (email: string, userName: string) => {
     const token = await JwtAdapter.generateToken({ email });
-    if (!token)
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Error generando token de validación de cuenta",
-        }),
-        headers: HEADERS.json,
-      };
+    if (!token) throw new Error("Error generando token de validación de cuenta");
 
-    const link = `${envs.FRONTEND_URL}/confirmar/${token}`;
+    const link = `${envs.FRONTEND_URL}/auth/confirmar/${token}`;
     const htmlBody = /*html*/ `
       <p>Hola: ${userName}, comprueba tu cuenta en Mercado de Creaciones</p>
       <p>
@@ -49,31 +41,22 @@ export class RegisterUser implements RegisterUserUseCase {
     `;
 
     const options = {
+      from: envs.MAILER_EMAIL,
       to: email,
       subject: "Mercado de Creaciones - Productos de mascotas",
       htmlBody,
     };
 
-    const isSent = this.emailService.sendEmail(options);
-    if (!isSent)
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Error enviando email de validación de cuenta",
-        }),
-        headers: HEADERS.json,
-      };
+    const isSent = await this.emailService.sendEmail(options);
+    if (!isSent) throw new Error("Error enviando email de validación de cuenta");
 
     return true;
   };
 
-  public async execute(dto: RegisterUserDto): Promise<HandlerResponse> {
-    const existUser = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, dto.email));
+  public async execute(dto: RegisterUserDto): Promise<HandlerResponse> { 
+    const existUser = await this.userService.findOne(usersTable.email, dto.email);
 
-    if (existUser.length > 0)
+    if (existUser)
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -86,7 +69,7 @@ export class RegisterUser implements RegisterUserUseCase {
       const password = BcriptAdapter.hash(dto.password);
 
       await Promise.all([
-        db.insert(usersTable).values({ ...dto, password }),
+        this.userService.insert({...dto,password}),
         this.sendUserValidation(dto.email, dto.name),
       ]);
 
@@ -98,11 +81,11 @@ export class RegisterUser implements RegisterUserUseCase {
         }),
         headers: HEADERS.json,
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          message: error,
+          message: error.message,
         }),
         headers: HEADERS.json,
       };

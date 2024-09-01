@@ -1,4 +1,4 @@
-import { db } from "../../../data/db";
+import { UserService } from '../../../services';
 import { usersTable } from "../../../data/schemas/user.schema";
 
 import { LoginUserDto } from "../dtos";
@@ -6,19 +6,18 @@ import { BcriptAdapter, JwtAdapter } from "../../../config/adapters";
 import { HEADERS } from "../../../config/utils";
 
 import { HandlerResponse } from "@netlify/functions";
-import { eq } from "drizzle-orm";
 
 interface LoginUserUseCase {
   execute: (dto: LoginUserDto) => Promise<HandlerResponse>;
 }
 
 export class LoginUser implements LoginUserUseCase {
+  constructor(
+    private readonly userService: UserService  = new UserService(),
+  ){}
 
   public async execute(dto: LoginUserDto): Promise<HandlerResponse> {
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, dto.email));
+    const user = await this.userService.findOne(usersTable.email, dto.email);
     
     if (!user) return {
       statusCode: 400,
@@ -47,7 +46,7 @@ export class LoginUser implements LoginUserUseCase {
       headers: HEADERS.json,
     };
 
-    const token = await JwtAdapter.generateToken({ email: user.email }, "1d");
+    const token = await JwtAdapter.generateToken({ email: user.email }, "3d");
     if (!token) return {
       statusCode: 500,
       body: JSON.stringify({

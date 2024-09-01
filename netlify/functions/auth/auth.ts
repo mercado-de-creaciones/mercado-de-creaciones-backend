@@ -1,14 +1,35 @@
 import type { HandlerEvent, Handler } from "@netlify/functions";
 
-import { ChangePassword, LoginUser, RegisterUser, ResetPassword, ValidateEmail } from "./use-cases";
-import { ChangePasswordDto, LoginUserDto, RegisterUserDto, ResetPasswordDto } from "./dtos";
-import { HEADERS, fromBodyToObject } from "../../config/utils";
-import { CheckUserToken } from "./use-cases/check-user-token";
+import {
+  ChangePassword,
+  CheckUserToken,
+  LoginUser,
+  RegisterUser,
+  ResetPassword,
+  ValidateEmail,
+} from "./use-cases";
+
+import {
+  ChangePasswordDto,
+  LoginUserDto,
+  RegisterUserDto,
+  ResetPasswordDto,
+} from "./dtos";
+
+import { fromBodyToObject, HEADERS } from "../../config/utils";
 
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path } = event;
   const body = event.body ? fromBodyToObject(event.body) : {};
+
   const token = path.split("/").pop();
+
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: HEADERS.json,
+    };
+  }
 
   if (httpMethod === "POST" && path.includes("/register")) {
     const [error, registerUserDto] = RegisterUserDto.create(body);
@@ -27,7 +48,7 @@ const handler: Handler = async (event: HandlerEvent) => {
       .catch((error) => error);
   }
 
-  if (httpMethod === "POST" && path.includes("/login")) { 
+  if (httpMethod === "POST" && path.includes("/login")) {
     const [error, loginUserDto] = LoginUserDto.create(body);
     if (error)
       return {
@@ -37,14 +58,14 @@ const handler: Handler = async (event: HandlerEvent) => {
         }),
         headers: HEADERS.json,
       };
-    
-     return new LoginUser()
-       .execute(loginUserDto!)
-       .then((res) => res)
-       .catch((error) => error);
+
+    return new LoginUser()
+      .execute(loginUserDto!)
+      .then((res) => res)
+      .catch((error) => error);
   }
 
-  if (httpMethod === "POST" && path.includes("/reset-password")) { 
+  if (httpMethod === "POST" && path.includes("/reset-password")) {
     const [error, resetPasswordDto] = ResetPasswordDto.create(body);
     if (error)
       return {
@@ -60,7 +81,7 @@ const handler: Handler = async (event: HandlerEvent) => {
       .then((res) => res)
       .catch((error) => error);
   }
-  
+
   if (httpMethod === "POST" && path.includes("/change-password") && token) {
     const [error, changePasswordDto] = ChangePasswordDto.create(body);
     if (error)
@@ -71,7 +92,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         }),
         headers: HEADERS.json,
       };
-    
+
     return new ChangePassword()
       .execute(token, changePasswordDto?.newPassword!)
       .then((res) => res)
@@ -91,8 +112,6 @@ const handler: Handler = async (event: HandlerEvent) => {
       .then((res) => res)
       .catch((error) => error);
   }
-
-
 
   return {
     statusCode: 405,

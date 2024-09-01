@@ -1,18 +1,22 @@
-import { db } from "../../../data/db";
+import { UserService } from "../../../services";
 import { usersTable } from "../../../data/schemas/user.schema";
 
-import { HEADERS } from "../../../config/utils";
 import { BcriptAdapter, JwtAdapter } from "../../../config/adapters";
+import { HEADERS } from "../../../config/utils";
 import { EmailResponse } from "../../../interfaces/response.interface";
 
 import { HandlerResponse } from "@netlify/functions";
-import { eq } from "drizzle-orm";
 interface ChangePasswordUseCase {
   execute: (token: string, newPassword: string) => Promise<HandlerResponse>;
 }
 
 export class ChangePassword implements ChangePasswordUseCase {
-  public async execute(token: string, newPassword: string): Promise<HandlerResponse> {
+  constructor(private readonly userService: UserService = new UserService()) {}
+
+  public async execute(
+    token: string,
+    newPassword: string
+  ): Promise<HandlerResponse> {
     const payload = await JwtAdapter.validateToken<EmailResponse>(token);
 
     if (!payload)
@@ -34,10 +38,7 @@ export class ChangePassword implements ChangePasswordUseCase {
         headers: HEADERS.json,
       };
 
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
+    const user = await this.userService.findOne(usersTable.email, email);
 
     if (!user)
       return {
@@ -47,20 +48,27 @@ export class ChangePassword implements ChangePasswordUseCase {
         }),
         headers: HEADERS.json,
       };
-    
-    const password = BcriptAdapter.hash(newPassword);
 
-    await db
-      .update(usersTable)
-      .set({ password, })
-      .where(eq(usersTable.email, user.email));
+    try {
+      const password = BcriptAdapter.hash(newPassword);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: "Password modificado correctamente",
-      }),
-      headers: HEADERS.json,
-    };
+      await this.userService.update({ password }, usersTable.email, user.email);
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: "Password modificado correctamente",
+        }),
+        headers: HEADERS.json,
+      };
+    } catch (error: any) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: error.message,
+        }),
+        headers: HEADERS.json,
+      };
+    }
   }
 }

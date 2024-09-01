@@ -1,15 +1,13 @@
-import { db } from "../../../data/db";
-import { usersTable } from "../../../data/schemas/user.schema";
-
-import { EmailService } from "../../../services";
+import { EmailService, UserService } from "../../../services";
 import { ResetPasswordDto } from "../dtos";
+
+import { usersTable } from "../../../data/schemas/user.schema";
 
 import { JwtAdapter } from "../../../config/adapters";
 import { HEADERS } from "../../../config/utils";
 import { envs } from "../../../config/envs";
 
 import { HandlerResponse } from "@netlify/functions";
-import { eq } from "drizzle-orm";
 
 interface ResetPasswordUseCase {
   execute: (dto: ResetPasswordDto) => Promise<HandlerResponse>;
@@ -17,28 +15,22 @@ interface ResetPasswordUseCase {
 
 export class ResetPassword implements ResetPasswordUseCase {
   constructor(
-    public readonly emailService: EmailService = new EmailService(
-      envs.MAILER_HOST,
-      envs.MAILER_SERVICE,
-      envs.MAILER_EMAIL,
-      envs.MAILER_PORT,
-      envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
-    )
+    private readonly userService: UserService = new UserService(),
+    private readonly emailService: EmailService = new EmailService({
+      mailerHost: envs.MAILER_HOST,
+      mailerPort: envs.MAILER_PORT,
+      mailerUser: envs.MAILER_USER,
+      senderEmailPassword: envs.MAILER_SECRET_KEY,
+      postToProvider: envs.SEND_EMAIL,
+    })
   ) {}
 
   private async sendPasswordValidation(email: string, userName: string) {
     const token = await JwtAdapter.generateToken({ email });
     if (!token)
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Error generando token de cambio de contraseña",
-        }),
-        headers: HEADERS.json,
-      };
+      throw new Error("Error generando token de cambio de contraseña");
 
-    const link = `${envs.FRONTEND_URL}/olvide-password/${token}`;
+    const link = `${envs.FRONTEND_URL}/auth/olvide-password/${token}`;
 
     const htmlBody = /*html*/ `
       <p>Hola: ${userName}, ¿olvidaste tu contraseña?</p>
@@ -51,29 +43,21 @@ export class ResetPassword implements ResetPasswordUseCase {
     `;
 
     const options = {
+      from: envs.MAILER_EMAIL,
       to: email,
       subject: "Mercado de Creaciones - Cambio de Contraseña",
       htmlBody,
     };
 
-    const isSent = this.emailService.sendEmail(options);
+    const isSent = await this.emailService.sendEmail(options);
     if (!isSent)
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Error enviando email de cambio de contraseña",
-        }),
-        headers: HEADERS.json,
-      };
+      throw new Error("Error enviando email de cambio de contraseña");
 
     return true;
   }
 
   public async execute(dto: ResetPasswordDto): Promise<HandlerResponse> {
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, dto.email));
+    const user = await this.userService.findOne(usersTable.email, dto.email);
 
     if (!user)
       return {
@@ -84,9 +68,9 @@ export class ResetPassword implements ResetPasswordUseCase {
         headers: HEADERS.json,
       };
 
-    await this.sendPasswordValidation(user.email, user.name);
-
     try {
+      await this.sendPasswordValidation(user.email, user.name);
+      
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -94,11 +78,11 @@ export class ResetPassword implements ResetPasswordUseCase {
         }),
         headers: HEADERS.json,
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          message: error,
+          message: error.message,
         }),
         headers: HEADERS.json,
       };

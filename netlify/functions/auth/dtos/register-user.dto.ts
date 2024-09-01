@@ -1,4 +1,4 @@
-import { REGEX } from "../../../config/utils";
+import { REGEX } from '../../../config/utils/regular-exp';
 
 export class RegisterUserDto {
   private constructor(

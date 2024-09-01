@@ -26,6 +26,7 @@
 - nombre
 - username
 - password
+- emailValidated (boolean)
 - apellidos
 - telefono **(UQ)**
 - email **(UQ)**
@@ -79,7 +80,7 @@
 - venta_id **(PK)**
 - usuario_id **(FK)**
 - fecha
-- monto
+- total
 
 ### articulo_x_venta (ED|EP)
 
