@@ -1,12 +1,17 @@
+import { CategoryDto } from "../../../netlify/functions/product/dtos/db-category.dto";
+
 export const mockCategories = [
-    {
-        id: 1,
-        name: "Urbana",
-        active: true,
-    },
-    {
-        id: 2,
-        name: "Elegante",
-        active: true,
-    }
+    new CategoryDto(
+        1, 
+        "Casual",
+        [],
+        true
+    ),
+    new CategoryDto(
+        2, 
+        "Elegante",
+        [],
+        true
+    ),
+
 ];

@@ -49,11 +49,6 @@ export const registerProductMocks = {
         status: "PUBLISHED",
         categoryId: 1,
     },
-
-    
-
-
-
 }
 
 export const productPaginationMocks = {
