@@ -1,11 +1,8 @@
 import { HEADERS } from "../../../config/utils";
 import { HandlerResponse } from "@netlify/functions";
-import { db } from "../../../data/db";
-import { productsTable } from "../../../data/schemas/products.schema";
 import { ProductPaginationDto } from "../dtos";
-import { count } from 'drizzle-orm';
-import { ProductRepository } from "../../../services";
-
+import { ProductService } from "../../../services";
+import { FindAllOptionsDto } from "../dtos/findAll-options.dto";
 
 
 interface AllProductsUseCase {
@@ -13,16 +10,14 @@ interface AllProductsUseCase {
 }
 
 export class AllProducts implements AllProductsUseCase {
-
-
-    productRepository: ProductRepository = new ProductRepository();
+    constructor(private readonly productService: ProductService = new ProductService()) {}
 
     public async execute(queryParams: { [key: string]: any }): Promise<HandlerResponse> {
 
         let { page = 1, size = 10 } = queryParams;
 
         
-            const totalProducts = await this.productRepository.countProducts();
+            const totalProducts = await this.productService.count();
 
             if (totalProducts === 0) {
                 return {
@@ -31,7 +26,9 @@ export class AllProducts implements AllProductsUseCase {
                 };
             }
 
-            const products = await this.productRepository.getProducts(size, (page - 1) * size);
+            let options = new FindAllOptionsDto(size, (page- 1) * size);
+
+            const products = await this.productService.findAll(options);
 
             const hasPrev = page != 1;
             const hasNext = totalProducts >= size * page;

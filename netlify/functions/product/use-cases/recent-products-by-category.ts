@@ -1,9 +1,8 @@
 import { HandlerResponse } from "@netlify/functions";
-import { db } from "../../../data/db";
 import { productsTable } from "../../../data/schemas/products.schema";
 import { HEADERS } from "../../../config/utils";
-import { categoriesTable } from "../../../data/schemas/categories.schema";
-import { eq } from "drizzle-orm";
+import { CategoryService, ProductService } from "../../../services";
+import { FindAllOptionsDto } from "../dtos/findAll-options.dto";
 
 
 interface RecentProductsByCategoryUseCase {
@@ -11,16 +10,21 @@ interface RecentProductsByCategoryUseCase {
 }
 
 export class RecentProductsByCategory implements RecentProductsByCategoryUseCase {
+    constructor(
+        private readonly productService: ProductService = new ProductService(),
+        private readonly categoryService: CategoryService = new CategoryService()) {}
+
 
     public async execute(): Promise<HandlerResponse> {
-        const categories = await db
-            .select()
-            .from(categoriesTable);
+        let categories = await this.categoryService.findAll();
 
-        categories.filter((category) => category.active === true)
+        categories.filter((category) => category.active === true);
+        
+        console.log(categories);
 
         const promises = categories.map(async (currentCategory) => {
-            let product = await db.select().from(productsTable).limit(1).where(eq(productsTable.categoryId, currentCategory.id));
+            let options = new FindAllOptionsDto(1, 0, currentCategory.id, productsTable.categoryId );
+            let product = await this.productService.findAll(options);
             return { ...currentCategory, products: product, active: true };
         });
 

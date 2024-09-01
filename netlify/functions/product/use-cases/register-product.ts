@@ -1,8 +1,7 @@
 import { HandlerResponse } from "@netlify/functions";
-import { db } from "../../../data/db";
-import { productsTable } from "../../../data/schemas/products.schema";
 import { HEADERS } from "../../../config/utils";
 import { RegisterProductDto } from "../dtos";
+import { ProductService } from "../../../services";
 
 
 interface RegisterProductUseCase {
@@ -10,14 +9,12 @@ interface RegisterProductUseCase {
 }
 
 export class RegisterProduct implements RegisterProductUseCase {
+    constructor(private readonly productService: ProductService = new ProductService()) {}
 
     public async execute(dto: RegisterProductDto): Promise<HandlerResponse> {
         try {
 
-            const product = await db
-                .insert(productsTable)
-                .values(dto)
-
+            this.productService.insert(dto);
 
             return {
                 statusCode: 201,
