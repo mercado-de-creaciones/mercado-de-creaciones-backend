@@ -14,26 +14,26 @@ export class ProductService {
             return result[0].count;
         } catch (error) {
             console.error('Error al contar productos de la db:', error);
-            throw new Error('Ocurrió un error al contar productoscon la db');
+            throw new Error('Ocurrió un error al contar productos de la db');
         }
     }
 
-    public async findAll(options: FindAllOptionsDto) {
+    public async findAll(options?: FindAllOptionsDto) {
         let result: ProductDto[];
         try {
             let query = db
                 .select()
                 .from(productsTable) as any;
     
-            if (options.size !== undefined) {
+            if (options?.size !== undefined) {
                 query = query.limit(options.size);
             }
     
-            if (options.offset !== undefined) {
+            if (options?.offset !== undefined) {
                 query = query.offset(options.offset);
             }
 
-            if (options.field && options.value) {
+            if (options?.field && options.value) {
                 query = query.where(eq(options.field, options.value));
             }
     
