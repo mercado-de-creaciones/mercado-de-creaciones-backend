@@ -27,8 +27,8 @@ export class CategoryService {
             return result;
             
         } catch (error) {
-            console.error('Error al recuperar productos de la db: ', error);
-            throw new Error('Ocurrió un error al recuperar productos de la db');
+            console.error('Error al recuperar categorias de la db: ', error);
+            throw new Error('Ocurrió un error al recuperar categorias de la db');
         }
     }
 
