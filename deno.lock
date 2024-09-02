@@ -1,0 +1,33 @@
+{
+  "version": "3",
+  "remote": {
+    "https://edge.netlify.com/": "ff84a16f192fdb43db8b9dff869889f555c05857d075044d2a7cfa54c283a0a0",
+    "https://edge.netlify.com/bootstrap/config.ts": "0aa0a225d978b89e0e62cbd853701605199e7a84095e55eeb70147faf1a24803",
+    "https://edge.netlify.com/bootstrap/context.ts": "8f99269eeeeccf9b852e6089cc648c962a0ea20b2198b8b38b38e3b2ce2b9143",
+    "https://edge.netlify.com/bootstrap/cookie.ts": "8b0baae708989ca183c6f3b4ab3d029e6abcbc2e43f93edeb0ff447b3bbc3a05",
+    "https://edge.netlify.com/bootstrap/edge_function.ts": "b8253e86aa83c67341f5cfedeba5049d77fbf84dcab7eceff7566b7728ae9b39",
+    "https://edge.netlify.com/bootstrap/globals.ts": "38f9e0be6c2c78206bf14d2387d41964d38bbe81644b3668e203c6f6473408a7"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@neondatabase/serverless@^0.9.3",
+        "npm:@netlify/functions@^2.7.0",
+        "npm:@types/bcryptjs@^2.4.6",
+        "npm:@types/jsonwebtoken@^9.0.6",
+        "npm:@types/node@^20.12.12",
+        "npm:@types/nodemailer@^6.4.15",
+        "npm:@types/ws@^8.5.10",
+        "npm:bcryptjs@^2.4.3",
+        "npm:drizzle-kit@^0.21.4",
+        "npm:drizzle-orm@^0.30.10",
+        "npm:env-var@^7.5.0",
+        "npm:jsonwebtoken@^9.0.2",
+        "npm:nodemailer@^6.9.13",
+        "npm:ts-node-dev@^2.0.0",
+        "npm:typescript@^5.4.5",
+        "npm:ws@^8.17.0"
+      ]
+    }
+  }
+}

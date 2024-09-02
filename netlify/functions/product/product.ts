@@ -1,6 +1,6 @@
 import { Handler, HandlerEvent } from "@netlify/functions";
 import { HEADERS } from "../../config/utils";
-import { RecentProducts, RecentProductsByCategory, RegisterCategory, RegisterProduct, AllProducts } from "./use-cases";
+import { RecentProductsByCategory, RegisterCategory, RegisterProduct, AllProducts } from "./use-cases";
 import { RegisterProductDto } from "./dtos/register-product.dto";
 import { RegisterCategoryDto } from "./dtos/register-category.dto";
 
@@ -14,15 +14,6 @@ const handler: Handler = async (event: HandlerEvent) => {
 
     return new AllProducts()
       .execute(queryParams)
-      .then((res) => res)
-      .catch((error) => error);
-  }
-
-
-  if (httpMethod === "GET" && path.includes("/recent-products")) {
-
-    return new RecentProducts()
-      .execute()
       .then((res) => res)
       .catch((error) => error);
   }
@@ -76,6 +67,12 @@ const handler: Handler = async (event: HandlerEvent) => {
       .then((res) => res)
       .catch((error) => error);
   }
+
+  return {
+    statusCode: 404,
+    body: JSON.stringify({ mensaje: "Ruta no encontrada" }),
+    headers: HEADERS.json,
+  };
 }
 
 export { handler };

@@ -1,5 +1,5 @@
 export class ProductDto {
-    private constructor(
+    public constructor(
         public id: Number,
         public name: string,
         public price: string,
@@ -7,6 +7,8 @@ export class ProductDto {
         public size: string,
         public status: string,
         public categoryId: number,
+        public createdAt: Date,
+        public updatedAt?: Date | null,
         public description?: string | null,
         public img?: string | null,
     ) { }

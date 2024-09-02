@@ -1,8 +1,7 @@
 import { HandlerResponse } from "@netlify/functions";
-import { db } from "../../../data/db";
 import { HEADERS } from "../../../config/utils";
 import { RegisterCategoryDto } from "../dtos";
-import { categoriesTable } from "../../../data/schemas/categories.schema";
+import { CategoryService } from "../../../services";
 
 
 interface RegisterCategoryUseCase {
@@ -10,14 +9,13 @@ interface RegisterCategoryUseCase {
 }
 
 export class RegisterCategory implements RegisterCategoryUseCase {
+    constructor(private readonly categoryService: CategoryService = new CategoryService()) {}
+
 
     public async execute(dto: RegisterCategoryDto): Promise<HandlerResponse> {
         try {
 
-            const category = await db
-                .insert(categoriesTable)
-                .values(dto)
-
+            await this.categoryService.insert(dto);
 
             return {
                 statusCode: 201,

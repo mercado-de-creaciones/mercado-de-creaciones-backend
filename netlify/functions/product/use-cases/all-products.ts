@@ -1,10 +1,8 @@
 import { HEADERS } from "../../../config/utils";
 import { HandlerResponse } from "@netlify/functions";
-import { db } from "../../../data/db";
-import { productsTable } from "../../../data/schemas/products.schema";
 import { ProductPaginationDto } from "../dtos";
-import { count } from 'drizzle-orm';
-
+import { ProductService } from "../../../services";
+import { FindAllOptionsDto } from "../dtos/findAll-options.dto";
 
 
 interface AllProductsUseCase {
@@ -12,33 +10,41 @@ interface AllProductsUseCase {
 }
 
 export class AllProducts implements AllProductsUseCase {
+    constructor(private readonly productService: ProductService = new ProductService()) {}
 
     public async execute(queryParams: { [key: string]: any }): Promise<HandlerResponse> {
 
         let { page = 1, size = 10 } = queryParams;
 
-        const totalProducts = (await db.select({ count: count() }).from(productsTable))[0].count;
-
-        const products = await db
-            .select()
-            .from(productsTable)
-            .limit(size)
-            .offset((page - 1) * size);
-            
-        const hasPrev = page != 1;
-        const hasNext = totalProducts >= size * page;
         
-        const response = ProductPaginationDto.create(page, size, hasPrev, hasNext, products);
+            const totalProducts = await this.productService.count();
 
+            if (totalProducts === 0) {
+                return {
+                    statusCode: 204,
+                    headers: HEADERS.json,
+                };
+            }
 
-        return {
-            statusCode: 400,
-            body: JSON.stringify({
-                response
-            }),
-            headers: HEADERS.json,
-        };
-            
+            let options = new FindAllOptionsDto(size, (page- 1) * size);
+
+            const products = await this.productService.findAll(options);
+
+            const hasPrev = page != 1;
+            const hasNext = totalProducts >= size * page;
+
+            const object = {page, size, hasPrev, hasNext, products};
+
+            const [, productPaginationDto] = ProductPaginationDto.create(object);
+
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    productPaginationDto
+                }),
+                headers: HEADERS.json,
+            };
+
     }
 
 

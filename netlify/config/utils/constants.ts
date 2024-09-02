@@ -1,4 +1,4 @@
-import { envs } from '../envs';
+import { envs } from "../envs";
 
 const CORS = {
   "Access-Control-Allow-Origin": envs.FRONTEND_URL,
