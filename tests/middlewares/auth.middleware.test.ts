@@ -51,7 +51,7 @@ describe("Probar middleware validateJWT", () => {
 
     // Mock para pasar payload para validar token y mock cuando no se retorna el usuario del token
     jest.spyOn(JwtAdapter, "validateToken").mockResolvedValue(validPayload);
-    jest.spyOn(UserService.prototype, "findOne").mockResolvedValue(undefined);
+    jest.spyOn(UserService.prototype, "innerJoinCountry").mockResolvedValue(undefined);
 
     const message = "Invalid token - User not found";
     const result = await validateJWT("Bearer validtoken");
@@ -68,15 +68,16 @@ describe("Probar middleware validateJWT", () => {
     const validPayload = { email: "moi.prado20@gmail.com" };
     const mockUser = {
       id: 1,
-      name: "Moises Prado",
-      email: "moi.prado20@gmail.com",
-      emailValidated: true,
-      role: "USER_ROLE",
-      img: null,
+      name: "Moises",
+      lastName: "Prado",
+      username: "Admoises",
+      email: "moisesfriki15@gmail.com",
+      img: "https://www.xtrafondos.com/wallpapers/programacion-computadora-y-lentes-10837.jpg",
+      country: "Argentina",
     };
 
     jest.spyOn(JwtAdapter, "validateToken").mockResolvedValue(validPayload);
-    jest.spyOn(UserService.prototype, "findOne").mockResolvedValue(mockUser);
+    jest.spyOn(UserService.prototype, "innerJoinCountry").mockResolvedValue(mockUser);
 
     const result = await validateJWT("Bearer validtoken");
 

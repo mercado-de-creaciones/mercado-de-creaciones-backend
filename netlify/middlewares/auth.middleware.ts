@@ -6,6 +6,7 @@ import { JwtAdapter } from '../config/adapters/jwt.adapter';
 
 import { EmailResponse } from '../interfaces/response.interface';
 import { HEADERS } from '../config/utils/constants';
+import { countriesTable } from '../data/schemas';
 
 export const validateJWT = async (authorization: string) => {
   const userService = new UserService();
@@ -38,13 +39,14 @@ export const validateJWT = async (authorization: string) => {
       };
     }
 
-    const user = await userService.findOne(usersTable.email, payload.email, {
+    const user = await userService.innerJoinCountry({
       id: usersTable.id,
       name: usersTable.name,
+      lastName: usersTable.lastName,
+      username: usersTable.username,
       email: usersTable.email,
-      emailValidated: usersTable.emailValidated,
-      role: usersTable.role,
       img: usersTable.img,
+      country: countriesTable.name,
     });
 
     if (!user) {
