@@ -12,14 +12,9 @@
     "drizzle:introspect": "npx drizzle-kit introspect",
     "drizzle:studio": "npx drizzle-kit studio",
     "test": "jest",
-<<<<<<< HEAD
-    "test:watch": "jest --watch --detectOpenHandles",
-    "test:coverage": "jest --coverage"
-=======
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "seed": "ts-node-dev ./netlify/data/seed/seed.ts"
->>>>>>> moises
   },
   "keywords": [],
   "author": "",
