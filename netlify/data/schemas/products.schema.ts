@@ -1,4 +1,4 @@
-import { serial, varchar, pgTable, pgEnum, timestamp, integer } from "drizzle-orm/pg-core";
+import { serial, varchar, pgTable, pgEnum, timestamp, integer, doublePrecision } from "drizzle-orm/pg-core";
 
 import { subcategoriesTable } from "./subcategories.schema";
 
@@ -11,8 +11,8 @@ export const productsTable = pgTable("products", {
   name: varchar("name").notNull(),
   description: varchar("description"),
   img: varchar("img"),
-  price: varchar("price").notNull(),
-  stock: varchar("stock").notNull(),
+  price: doublePrecision("price").notNull(),
+  stock: integer("stock").notNull(),
   size: sizesEnum("size").notNull(),
   status: statusEnum("status").notNull().default("PUBLISHED"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
