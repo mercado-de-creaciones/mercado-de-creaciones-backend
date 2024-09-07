@@ -1,5 +1,6 @@
-import { serial, varchar, pgTable, pgEnum, timestamp, integer } from "drizzle-orm/pg-core";
-import { categoriesTable } from "./categories.schema";
+import { serial, varchar, pgTable, pgEnum, timestamp, integer, doublePrecision } from "drizzle-orm/pg-core";
+
+import { subcategoriesTable } from "./subcategories.schema";
 
 
 export const sizesEnum = pgEnum("size", ["XS","S", "M", "L", "XL","XXL"]);
@@ -10,15 +11,13 @@ export const productsTable = pgTable("products", {
   name: varchar("name").notNull(),
   description: varchar("description"),
   img: varchar("img"),
-  price: varchar("price").notNull(),
-  stock: varchar("stock").notNull(),
-  size: varchar("size").notNull(),
-  status: varchar("status").notNull(),
+  price: doublePrecision("price").notNull(),
+  stock: integer("stock").notNull(),
+  size: sizesEnum("size").notNull(),
+  status: statusEnum("status").notNull().default("PUBLISHED"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt"),
-  categoryId: integer("categoryId")
-    .notNull()
-    .references(() => categoriesTable.id, { onDelete: "set null" }),
+  subcategoryId: integer("subcategoryId").references(() => subcategoriesTable.id, { onDelete: "set null" }),
 });
 
 export type InsertProduct = typeof productsTable.$inferInsert;

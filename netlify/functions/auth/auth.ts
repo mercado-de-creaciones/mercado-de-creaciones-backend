@@ -21,7 +21,6 @@ import { fromBodyToObject, HEADERS } from "../../config/utils";
 const handler: Handler = async (event: HandlerEvent) => {
   const { httpMethod, path, } = event;
   const body = event.body ? fromBodyToObject(event.body) : {};
-  
   const token = path.split("/").pop();
 
   if (event.httpMethod === "OPTIONS") {
@@ -81,7 +80,6 @@ const handler: Handler = async (event: HandlerEvent) => {
       .then((res) => res)
       .catch((error) => error);
   }
-
   if (httpMethod === "POST" && path.includes("/change-password") && token) {
     const [error, changePasswordDto] = ChangePasswordDto.create(body);
     if (error)
@@ -92,7 +90,6 @@ const handler: Handler = async (event: HandlerEvent) => {
         }),
         headers: HEADERS.json,
       };
-
     return new ChangePassword()
       .execute(token, changePasswordDto?.newPassword!)
       .then((res) => res)

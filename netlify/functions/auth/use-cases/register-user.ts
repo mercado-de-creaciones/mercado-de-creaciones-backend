@@ -8,7 +8,6 @@ import { envs } from "../../../config/envs";
 
 import { HandlerResponse } from "@netlify/functions";
 
-
 interface RegisterUserUseCase {
   execute(dto: RegisterUserDto): Promise<HandlerResponse>;
 }

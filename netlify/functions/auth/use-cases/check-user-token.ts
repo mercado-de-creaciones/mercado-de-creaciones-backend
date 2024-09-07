@@ -46,7 +46,6 @@ export class CheckUserToken implements CheckUserTokenUseCase {
         }),
         headers: HEADERS.json,
       };
-
     return {
       statusCode: 200,
       body: JSON.stringify({
