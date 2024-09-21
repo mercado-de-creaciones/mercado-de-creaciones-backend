@@ -36,16 +36,23 @@ describe("Probar caso de uso RegisterUser", () => {
     jest.clearAllMocks();
   });
 
+  const dto: RegisterUserDto = {
+    name: "Test User",
+    lastName: "Test Lastname",
+    username: "test_user",
+    email: "test@example.com",
+    password: "password123",
+  };
+
   test("Debería devolver 400 si el usuario ya está registrado", async () => {
     const mockUser = {
       id: 1,
-      email: "test@example.com",
-    };
-
-    const dto: RegisterUserDto = {
-      email: "test@example.com",
-      password: "password123",
       name: "Test User",
+      lastName: "Test Last Name",
+      username: "testuser",
+      email: "test@example.com",
+      password: "hashed_password",
+      emailValidated: true,
     };
 
     userServiceMock.findOne.mockResolvedValue(mockUser);
@@ -64,11 +71,6 @@ describe("Probar caso de uso RegisterUser", () => {
   });
 
   test("Debería devolver 500 si ocurre un error generando el token de validación", async () => {
-    const dto: RegisterUserDto = {
-      email: "test@example.com",
-      password: "password123",
-      name: "Test User",
-    };
 
     userServiceMock.findOne.mockResolvedValue(undefined);
     (JwtAdapter.generateToken as jest.Mock).mockResolvedValue(null);
@@ -87,11 +89,6 @@ describe("Probar caso de uso RegisterUser", () => {
   });
 
   test("Debería devolver 500 si ocurre un error enviando el email de validación", async () => {
-    const dto: RegisterUserDto = {
-      email: "test@example.com",
-      password: "password123",
-      name: "Test User",
-    };
 
     const mockToken = "valid_token";
 
@@ -113,11 +110,6 @@ describe("Probar caso de uso RegisterUser", () => {
   });
 
   test("Debería devolver 200 si el usuario es registrado exitosamente", async () => {
-    const dto: RegisterUserDto = {
-      email: "test@example.com",
-      password: "password123",
-      name: "Test User",
-    };
 
     const mockToken = "valid_token";
     const mockHashPassword = "hash_password";

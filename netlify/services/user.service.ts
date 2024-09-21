@@ -10,7 +10,7 @@ export class UserService {
     field: Column<ColumnBaseConfig<ColumnDataType, string>>,
     value: unknown,
     fieldsToShow?: Record<string, any>
-  ): Promise<InsertUser> {
+  ): Promise<InsertUser | undefined> {
     const oneRecordByFilter = await db
       .select(fieldsToShow!)
       .from(usersTable)

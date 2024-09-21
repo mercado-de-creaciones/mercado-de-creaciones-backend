@@ -21,7 +21,7 @@ export class RecentProductsByCategory implements RecentProductsByCategoryUseCase
         categories.filter((category) => category.active === true);
         
         const promises = categories.map(async (currentCategory) => {
-            let options = new FindAllOptionsDto(1, 0, currentCategory.id, productsTable.categoryId );
+            let options = new FindAllOptionsDto(1, 0, currentCategory.id, productsTable.subcategoryId );
             let product = await this.productService.findAll(options);
             return { ...currentCategory, products: product, active: true };
         });

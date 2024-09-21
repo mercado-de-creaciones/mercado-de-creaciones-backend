@@ -25,8 +25,18 @@ describe("Probar caso de uso LoginUser", () => {
     jest.clearAllMocks();
   });
 
+  const mockUser = {
+    id: 1,
+    name: "Test User",
+    lastName: "Test Last Name",
+    username: "testuser",
+    email: "user@example.com",
+    password: "hashed_password",
+    emailValidated: true,
+  };
+
+
   test("Debería devolver 400 si el usuario no existe", async () => {
-    // Simulamos que findOne devuelve undefined (usuario no encontrado)
     userServiceMock.findOne.mockResolvedValue(undefined);
 
     const dto: LoginUserDto = {
@@ -47,12 +57,8 @@ describe("Probar caso de uso LoginUser", () => {
   });
 
   test("debería devolver 403 si el email no ha sido validado", async () => {
-    const mockUser = {
-      email: "user@example.com",
-      password: "hashed_password",
-      emailValidated: false,
-    };
-    userServiceMock.findOne.mockResolvedValue(mockUser);
+    
+    userServiceMock.findOne.mockResolvedValue({...mockUser,emailValidated:false});
 
     const dto: LoginUserDto = {
       email: "user@example.com",
@@ -72,11 +78,6 @@ describe("Probar caso de uso LoginUser", () => {
   });
 
   test("Debería devolver 400 si la contraseña es incorrecta", async () => {
-    const mockUser = {
-      email: "user@example.com",
-      password: "hashed_password",
-      emailValidated: true,
-    };
 
     const dto: LoginUserDto = {
       email: "user@example.com",
@@ -100,11 +101,6 @@ describe("Probar caso de uso LoginUser", () => {
   });
 
   test("Debería devolver 500 si hay un error al generar el token", async () => {
-    const mockUser = {
-      email: "user@example.com",
-      password: "hashed_password",
-      emailValidated: true,
-    };
     const dto: LoginUserDto = {
       email: "user@example.com",
       password: "correct_password",
@@ -125,12 +121,7 @@ describe("Probar caso de uso LoginUser", () => {
   });
 
   test("Debería devolver 200 y el token si las credenciales son correctas", async () => {
-    const mockUser = {
-      email: "user@example.com",
-      password: "hashed_password",
-      emailValidated: true,
-    };
-    const { email, emailValidated } = mockUser;
+    const { password:_, ...user } = mockUser;
 
     const mockToken = "valid_token";
     const mockTokenExpiration = "3d";
@@ -153,7 +144,7 @@ describe("Probar caso de uso LoginUser", () => {
     expect(response).toEqual({
       statusCode: 200,
       body: JSON.stringify({
-        user: { email, emailValidated },
+        user: user,
         token: mockToken,
       }),
       headers: HEADERS.json,

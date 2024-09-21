@@ -59,7 +59,10 @@ describe("Probar UserService", () => {
 
   test("Método insert debería agregar un nuevo usuario a la BD", async () => {
     const newUser = {
-      name: "Jane Doe",
+      id: 1,
+      name: "Jane",
+      lastName: "Doe",
+      username: "jane",
       email: "jane@example.com",
       password: "hashed_password",
     };

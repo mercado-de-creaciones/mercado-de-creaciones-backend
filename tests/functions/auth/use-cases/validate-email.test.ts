@@ -22,6 +22,15 @@ describe("Probar caso de uso ValidateEmail", () => {
     jest.clearAllMocks();
   });
 
+  const mockUser = {
+    id: 1,
+    name: "Test User",
+    lastName: "Test Last Name",
+    username: "testuser",
+    email: "test@example.com",
+    password: "password123",
+  };
+
   test("Debería devolver 401 si el token proporcionado es inválido", async () => {
     (JwtAdapter.validateToken as jest.Mock).mockResolvedValue(null);
 
@@ -76,11 +85,6 @@ describe("Probar caso de uso ValidateEmail", () => {
   });
 
   test("Debería devolver 200 si se valida correctamente el email del usuario registrado", async () => {
-    const mockUser = {
-      id: 1,
-      email: "test@example.com",
-    };
-
     const mockToken = "valid_token";
 
     (JwtAdapter.validateToken as jest.Mock).mockResolvedValue(mockUser);
@@ -104,7 +108,7 @@ describe("Probar caso de uso ValidateEmail", () => {
 
   test("Debería devolver 500 si ocurre un error durante la actualización del usuario", async () => {
     const mockToken = "valid_token";
-    const mockUser = { email: "test@example.com" };
+    // const mockUser = { email: "test@example.com" };
 
     (JwtAdapter.validateToken as jest.Mock).mockResolvedValue(mockUser);
     userServiceMock.findOne.mockResolvedValue(mockUser);

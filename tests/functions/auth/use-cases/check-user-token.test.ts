@@ -78,7 +78,12 @@ describe("Probar caso de uso CheckUserToken", () => {
   test("Debería devolver 200 si se valida el token de usuario", async () => {
     const mockUser = {
       id: 1,
-      email: "test@example.com",
+      name: "Test User",
+      lastName: "Test Last Name",
+      username: "testuser",
+      email: "user@example.com",
+      password: "hashed_password",
+      emailValidated: true,
     };
 
     const mockToken = "valid_token";

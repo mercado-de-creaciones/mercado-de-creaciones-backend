@@ -39,6 +39,16 @@ describe("Probar caso de uso ResetPassword", () => {
     jest.clearAllMocks();
   });
 
+  const mockUser = {
+    id: 1,
+    name: "Test User",
+    lastName: "Test Last Name",
+    username: "testuser",
+    email: "test@example.com",
+    password: "hashed_password",
+    emailValidated: true,
+  };
+
   test("Debería devolver 400 si el usuario no existe", async () => {
     userServiceMock.findOne.mockResolvedValue(undefined);
 
@@ -59,11 +69,6 @@ describe("Probar caso de uso ResetPassword", () => {
   });
 
   test("Debería devolver 500 si ocurre un error generando el token de validación", async () => {
-    const mockUser = {
-      id: 1,
-      email: "test@example.com",
-    };
-
     const dto: ResetPasswordDto = {
       email: "test@example.com",
     };
@@ -86,10 +91,6 @@ describe("Probar caso de uso ResetPassword", () => {
   });
 
   test("Debería devolver 500 si ocurre un error enviando el email de validación", async () => {
-     const mockUser = {
-       id: 1,
-       email: "test@example.com",
-     };
     
     const dto: ResetPasswordDto = {
       email: "test@example.com",
@@ -115,10 +116,6 @@ describe("Probar caso de uso ResetPassword", () => {
   });
 
   test("Debería devolver 200 si el usuario es registrado exitosamente", async () => {
-    const mockUser = {
-      id: 1,
-      email: "test@example.com",
-    };
 
     const dto: ResetPasswordDto = {
       email: "test@example.com",
